@@ -12,3 +12,6 @@ Writing UI automation tests is hard. Maintaining them is harder.
 2. Replay tests on demand
 3. Group tests into user flows + test suites
 4. Invoke tests remotely.
+
+
+###### _logo by [Gorm Haraldson](http://www.gormelito.se/)_
