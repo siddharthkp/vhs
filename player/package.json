@@ -1,0 +1,40 @@
+{
+  "name": "vhs-player",
+  "version": "0.0.1",
+  "description": "tape based ui testing",
+  "main": "src/index.js",
+  "dependencies": {
+    "simple-xpath-position": "2.0.2"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "6.18.0",
+    "babelify": "7.3.0",
+    "browserify": "13.1.1",
+    "browserify-hmr": "0.3.5",
+    "watchify": "3.7.0"
+  },
+  "scripts": {
+    "build": "browserify src -o dist.js -t babelify",
+    "dev": "watchify -vd src -o dist.js -t babelify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/siddharthkp/vhs.git"
+  },
+  "keywords": [
+    "vhs",
+    "automation",
+    "testing"
+  ],
+  "author": "siddharthkp",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/siddharthkp/vhs/issues"
+  },
+  "homepage": "https://github.com/siddharthkp/vhs#readme",
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  }
+}
