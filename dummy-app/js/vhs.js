@@ -1,1 +1,1 @@
-../../vcr/dist.js
+../../recorder/dist.js
