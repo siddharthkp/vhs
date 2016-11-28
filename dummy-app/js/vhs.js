@@ -1,1 +1,1 @@
-../../player/dist.js
+../../vcr/dist.js
