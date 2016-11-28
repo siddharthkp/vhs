@@ -4,6 +4,9 @@
   "description": "tape based ui testing",
   "main": "src/index.js",
   "dependencies": {
+    "array-includes": "3.0.2",
+    "has": "1.0.1",
+    "jquery-simulate-ext": "1.3.0",
     "simple-xpath-position": "2.0.2"
   },
   "devDependencies": {
@@ -11,11 +14,12 @@
     "babelify": "7.3.0",
     "browserify": "13.1.1",
     "browserify-hmr": "0.3.5",
+    "browserify-shim": "3.8.12",
     "watchify": "3.7.0"
   },
   "scripts": {
-    "build": "browserify src -o dist.js -t babelify",
-    "dev": "watchify -vd src -o dist.js -t babelify"
+    "build": "browserify src -o dist.js",
+    "dev": "watchify -vd src -o dist.js"
   },
   "repository": {
     "type": "git",
@@ -32,9 +36,7 @@
     "url": "https://github.com/siddharthkp/vhs/issues"
   },
   "homepage": "https://github.com/siddharthkp/vhs#readme",
-  "babel": {
-    "presets": [
-      "es2015"
-    ]
+  "browserify": {
+    "transform": ["babelify"]
   }
 }
