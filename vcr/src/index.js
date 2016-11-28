@@ -5,7 +5,10 @@ const xpath = require('simple-xpath-position');
 require('core-js/fn/array/includes');
 
 /* Whitelist of DOM events that are recorded */
-const eventTypes = ['click'];
+const eventTypes = ['click', 'keypress'];
+
+/* Hacky events */
+const specialEventTypes = ['keydown'];
 
 const events = [];
 
@@ -13,6 +16,7 @@ const events = [];
 const getEventHandlers = () => {
     let handlers = {};
     eventTypes.map(type => handlers[type] = record);
+    specialEventTypes.map(type => handlers[type] = record);
     return handlers;
 };
 
@@ -28,7 +32,11 @@ const detachHandlers = () => {
 
 const record = (event) => {
     /* Only record whitelisted event types */
-    if (!eventTypes.includes(event.type)) return;
+    if (!eventTypes.includes(event.type)) {
+        /* Some events like keydown need special treatment */
+        if (specialEventTypes.includes(event.type)) handleHacks(event);
+        return;
+    }
 
     /*
      * We want to get the xpath of the DOM element.
@@ -39,7 +47,7 @@ const record = (event) => {
      * We need to hijack the event, run our code first
      * and then play the event.
      */
-    event.preventDefault();
+    if (event.preventDefault) event.preventDefault();
 
     /* Adding a wait before each user event */
     events.push(getWaitEvent());
@@ -51,8 +59,22 @@ const record = (event) => {
     };
     events.push(syntheticEvent);
 
-    /* Playing our event */
-    playEvent(syntheticEvent);
+    if (!event.hacky) playEvent(syntheticEvent);
+};
+
+const handleHacks = (event) => {
+    /* The keypress event does not catch back space key */
+    if (event.type === 'keydown' && event.which === 8) backspaceHack(event);
+};
+
+const backspaceHack = ({which, target}) => {
+    let customEvent = {
+        type: 'keypress',
+        which,
+        target,
+        hacky: true
+    };
+    record(customEvent);
 };
 
 let lastEventTimestamp;
@@ -95,7 +117,7 @@ const playEvent = (event) => {
             else reject(new Error('Unknown event type. Could not play'));
         }).then(() => {
             /* Re-attach handlers after event is played */
-            attachHandlers();
+            attachHandlers(); //TODO: Don't attach in playback mode
             resolve();
         });
     });
@@ -116,8 +138,18 @@ const click = ({path}, resolve) => {
 
 const keypress = ({path, which},resolve) => {
     let element = getElement(path);
-    let key = String.fromCharCode(event.which);
-    // Simulate keypress
+    let currentValue = $(element).val();
+    if (which === 8) {
+        /* Manually handle backspace */
+        $(element).val(currentValue.substring(0, currentValue.length-1));
+    } else {
+        let key = String.fromCharCode(which);
+        /* Manually add charachter */
+        $(element).val(currentValue + key);
+    }
+    /* Trigger event */
+    $(element).trigger(jQuery.Event('keydown', {which}));
+    $(element).trigger(jQuery.Event('keyup', {which}));
     resolve();
 };
 
@@ -129,7 +161,9 @@ const wait = ({duration}, resolve) => {
 const play = () => playEventsRecursively(0);
 
 const playEventsRecursively = (index) => {
-    if (!events[index]) return;
+    if (!events[index]) {
+        return;
+    }
     playEvent(events[index]).then(() => playEventsRecursively(++index));
 };
 
@@ -142,4 +176,3 @@ $(() => {
         stop: detachHandlers //TODO: Change ambiguous name
     }
 });
-
