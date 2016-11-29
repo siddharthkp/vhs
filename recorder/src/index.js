@@ -158,7 +158,10 @@ const wait = ({duration}, resolve) => {
 };
 
 /* Play all recorded events */
-const play = () => playEventsRecursively(0);
+const play = () => {
+    events = JSON.parse(localStorage.getItem('vhs')).events;
+    playEventsRecursively(0);
+}
 
 const playEventsRecursively = (index) => {
     if (!events[index]) {
@@ -176,7 +179,7 @@ const record = () => {
 const stopRecording = () => {
     detachHandlers();
     isRecording = false;
-    localStorage.vhs = {events};
+    localStorage.setItem('vhs', JSON.stringify({events}));
 };
 
 const resumeRecording = () => {
