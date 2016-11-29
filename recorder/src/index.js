@@ -15,8 +15,8 @@ let events = [];
 /* Create event handlers for each event type - call `record` function */
 const getEventHandlers = () => {
     let handlers = {};
-    eventTypes.map(type => handlers[type] = record);
-    specialEventTypes.map(type => handlers[type] = record);
+    eventTypes.map(type => handlers[type] = recordEvent);
+    specialEventTypes.map(type => handlers[type] = recordEvent);
     return handlers;
 };
 
@@ -30,7 +30,7 @@ const detachHandlers = () => {
     $('html').off(handlers);
 };
 
-const record = (event) => {
+const recordEvent = (event) => {
     /* Only record whitelisted event types */
     if (!eventTypes.includes(event.type)) {
         /* Some events like keydown need special treatment */
@@ -74,7 +74,7 @@ const backspaceHack = ({which, target}) => {
         target,
         hacky: true
     };
-    record(customEvent);
+    recordEvent(customEvent);
 };
 
 let lastEventTimestamp;
