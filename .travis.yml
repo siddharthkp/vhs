@@ -5,3 +5,6 @@ script:
   - cd recorder && npm install && npm run build
 notifications:
   email: false
+cache:
+  directories:
+    - node_modules
