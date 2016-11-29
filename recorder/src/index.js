@@ -10,7 +10,7 @@ const eventTypes = ['click', 'keypress'];
 /* Hacky events */
 const specialEventTypes = ['keydown'];
 
-const events = [];
+let events = [];
 
 /* Create event handlers for each event type - call `record` function */
 const getEventHandlers = () => {
@@ -102,7 +102,7 @@ const playEvent = (event) => {
          * Don't want synthetic events to be recorded while when we play them.
          * We will end up in an infinite loop otherwise
         */
-        detachHandlers();
+        stopRecording();
 
         /*
         * All events return a promise which is resolved after
@@ -117,7 +117,7 @@ const playEvent = (event) => {
             else reject(new Error('Unknown event type. Could not play'));
         }).then(() => {
             /* Re-attach handlers after event is played */
-            attachHandlers(); //TODO: Don't attach in playback mode
+            resumeRecording(); //TODO: Don't attach in playback mode
             resolve();
         });
     });
@@ -167,12 +167,29 @@ const playEventsRecursively = (index) => {
     playEvent(events[index]).then(() => playEventsRecursively(++index));
 };
 
+let isRecording = false;
+const record = () => {
+    events = [];
+    resumeRecording();
+};
+
+const stopRecording = () => {
+    detachHandlers();
+    isRecording = false;
+    localStorage.vhs = {events};
+};
+
+const resumeRecording = () => {
+    attachHandlers();
+    isRecording = true;
+};
+
 $(() => {
     /* Expose public functions */
     window.vhs = {
         play,
         events,
-        record: attachHandlers,
-        stop: detachHandlers //TODO: Change ambiguous name
+        record: record,
+        stop: stopRecording //TODO: Change ambiguous name
     }
 });
