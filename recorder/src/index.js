@@ -170,6 +170,12 @@ const play = () => {
     playEventsRecursively(0);
 }
 
+const setupPlayback = () => {
+    if (isRecording) toggleRecording();
+    localStorage.setItem('vhs-playback', true);
+    location.reload();
+};
+
 const playEventsRecursively = (index) => {
     if (!events[index]) {
         controls.togglePlayingState();
@@ -204,10 +210,16 @@ const resumeRecording = () => {
 $(() => {
     /* Expose public functions */
     window.vhs = {
-        play,
         events,
-        toggleRecording
+        toggleRecording,
+        setupPlayback
     }
     wrapBodyInRecordable();
     controls.show();
+
+    let playback = localStorage.getItem('vhs-playback');
+    if (playback) {
+        play();
+        localStorage.removeItem('vhs-playback');
+    }
 });

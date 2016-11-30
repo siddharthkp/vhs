@@ -87,7 +87,7 @@ const html = `
         <span class="vhs-button" onclick="vhs.toggleRecording()">
             <span class="vhs-record-circle"></span>
         </span>
-        <span class="vhs-button vhs-play-button" onclick="vhs.play()">
+        <span class="vhs-button vhs-play-button" onclick="vhs.setupPlayback()">
             <span class="vhs-play-triangle"></span>
         </span>
     </div>
