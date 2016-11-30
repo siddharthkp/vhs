@@ -1,6 +1,6 @@
 {
   "scripts": {
-      "start": "http-server -p 3002"
+    "start": "list ."
   },
   "dependencies": {
     "todomvc-common": "1.0.1",
@@ -8,5 +8,8 @@
     "jquery": "3.1.1",
     "handlebars": "2.0.0",
     "director": "1.2.2"
+  },
+  "devDependencies": {
+    "list": "0.8.2"
   }
 }
