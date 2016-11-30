@@ -7,7 +7,7 @@ require('core-js/fn/array/includes');
 const controls = require('./controls');
 
 /* Whitelist of DOM events that are recorded */
-const eventTypes = ['click', 'keypress'];
+const eventTypes = ['click', 'keypress', 'dblclick'];
 
 /* Hacky events */
 const specialEventTypes = ['keydown'];
@@ -118,6 +118,7 @@ const playEvent = (event) => {
             let type = event.type;
             // TODO: Create an event map for events
             if (type === 'click') click(event, resolve);
+            if (type === 'dblclick') dblclick(event, resolve);
             else if (type === 'keypress') keypress(event, resolve);
             else if (type === 'wait') wait(event, resolve);
             else reject(new Error('Unknown event type. Could not play'));
@@ -139,6 +140,12 @@ const playEvent = (event) => {
 const click = ({path}, resolve) => {
     let element = getElement(path);
     $(element).trigger('click');
+    resolve();
+};
+
+const dblclick = ({path}, resolve) => {
+    let element = getElement(path);
+    $(element).trigger('dblclick');
     resolve();
 };
 
