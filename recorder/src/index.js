@@ -4,6 +4,8 @@ const xpath = require('simple-xpath-position');
 /* Polyfill for Array.prototype.includes */
 require('core-js/fn/array/includes');
 
+const controls = require('./controls');
+
 /* Whitelist of DOM events that are recorded */
 const eventTypes = ['click', 'keypress'];
 
@@ -20,14 +22,18 @@ const getEventHandlers = () => {
     return handlers;
 };
 
+const wrapBodyInRecordable = () => {
+    $('body').wrapInner('<div class="vhs-recordable"></div>')
+};
+
 const attachHandlers = () => {
     let handlers = getEventHandlers();
-    $('html').on(handlers);
+    $('.vhs-recordable').on(handlers);
 };
 
 const detachHandlers = () => {
     let handlers = getEventHandlers();
-    $('html').off(handlers);
+    $('.vhs-recordable').off(handlers);
 };
 
 const recordEvent = (event) => {
@@ -160,17 +166,25 @@ const wait = ({duration}, resolve) => {
 /* Play all recorded events */
 const play = () => {
     events = JSON.parse(localStorage.getItem('vhs')).events;
+    controls.togglePlayingState();
     playEventsRecursively(0);
 }
 
 const playEventsRecursively = (index) => {
     if (!events[index]) {
+        controls.togglePlayingState();
         return;
     }
     playEvent(events[index]).then(() => playEventsRecursively(++index));
 };
 
 let isRecording = false;
+const toggleRecording = () => {
+    if (isRecording) stopRecording();
+    else record();
+    controls.toggleRecordingState();
+};
+
 const record = () => {
     events = [];
     resumeRecording();
@@ -192,7 +206,8 @@ $(() => {
     window.vhs = {
         play,
         events,
-        record: record,
-        stop: stopRecording //TODO: Change ambiguous name
+        toggleRecording
     }
+    wrapBodyInRecordable();
+    controls.show();
 });

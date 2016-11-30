@@ -4,6 +4,7 @@
   "description": "tape based ui testing",
   "main": "src/index.js",
   "dependencies": {
+    "draggabilly": "2.1.1",
     "simple-xpath-position": "2.0.2"
   },
   "devDependencies": {
