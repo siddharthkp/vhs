@@ -8,12 +8,12 @@ const show = () => {
 
 const render = (events, lastEventIndex) => {
     $('.vhs-sidebar-events').empty();
-    for (let i = 0; i < events.length; i++) addEvent(events[i], i <= lastEventIndex);
+    for (let i = 0; i < events.length; i++) addEvent(events[i], i <= lastEventIndex ? 'passed': 'pending');
     followLogs();
 };
 
 const followLogs = () => {
-    let latestPassedTest = $('.vhs-sidebar-status-passed').last();
+    let latestPassedTest = $('.vhs-sidebar-event-passed').last();
     if (!latestPassedTest.length) return;
 
     if (!visible(latestPassedTest)) {
@@ -24,8 +24,8 @@ const followLogs = () => {
     }
 };
 
-const addEvent = (event, passed) => {
-    event.passed = passed;
+const addEvent = (event, status) => {
+    event.status = status;
     if (event.type === 'wait' && event.duration < 100) return;
     event.identifier = getPrettyIdentifier(event.path);
     if (event.which === 1) delete event.key; // click event
@@ -61,13 +61,19 @@ const styles = `<style>
         width: 250px;
         height: 100%;
         z-index: 999;
-        background: #FFF;
-        border-left: 1px solid #DDD;
+        background: #253447;
+        border-left: 1px solid #1C2939;
         overflow-y: auto;
+        color: #FFF;
+        font-size: 14px;
+    }
+    .vhs-sidebar-header {
+        background: #1C2939;
+        padding: 20px 30px;
+        font-size: 18px;
     }
     .vhs-sidebar-event {
         overflow: hidden;
-        border-bottom: 1px solid #DDD;
         padding: 10px;
     }
     .vhs-sidebar-event-type, .vhs-sidebar-event-key {
@@ -89,13 +95,19 @@ const styles = `<style>
         border-radius: 50%;
         margin: 2px 5px;
     }
-    .vhs-sidebar-status-pending {
-        background-color: orange;
+    .vhs-sidebar-event-pending {
+        color: #707C88;
     }
-    .vhs-sidebar-status-passed {
-        background-color: green;
+    .vhs-sidebar-event-pending .vhs-sidebar-status {
+        background-color: #707C88;
     }
-    .vhs-sidebar-status-failed {
+    .vhs-sidebar-event-passed {
+        color: #2EAADE;
+    }
+    .vhs-sidebar-event-passed .vhs-sidebar-status {
+        background-color: #2EAADE;
+    }
+    .vhs-sidebar-event-failed .vhs-sidebar-status {
         background-color: red;
     }
 </style>`;
@@ -103,17 +115,14 @@ const styles = `<style>
 const html = `
     <div class="vhs-sidebar">
         ${styles}
+        <div class="vhs-sidebar-header">
+            Events
+        </div>
         <div class="vhs-sidebar-events">
 
         </div>
     </div>
 `;
-
-const getStatusHTML = (passed) => {
-    let status = 'pending';
-    if (passed) status = 'passed';
-    return `<span class="vhs-sidebar-status vhs-sidebar-status-${status}"></span>`;
-};
 
 const getDetailHTML = (data, type) => {
     if (!data) return ``;
@@ -121,10 +130,10 @@ const getDetailHTML = (data, type) => {
     return `<span class="vhs-sidebar-event-${type}">${data}</span>`;
 };
 
-const getNewEventHTML = ({type, duration, key, identifier, passed}) => {
+const getNewEventHTML = ({type, duration, key, identifier, status}) => {
     return `
-        <div class="vhs-sidebar-event">
-            ${getStatusHTML(passed)}
+        <div class="vhs-sidebar-event vhs-sidebar-event-${status}">
+            <span class="vhs-sidebar-status"></span>
             ${getDetailHTML(identifier, 'path')}
             ${getDetailHTML(duration, 'duration')}
 
