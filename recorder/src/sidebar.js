@@ -1,4 +1,6 @@
 const xpath = require('simple-xpath-position');
+const visible = require('withinviewport');
+window.visble = visible;
 
 const show = () => {
     $('body').append(html);
@@ -7,6 +9,19 @@ const show = () => {
 const render = (events, lastEventIndex) => {
     $('.vhs-sidebar-events').empty();
     for (let i = 0; i < events.length; i++) addEvent(events[i], i <= lastEventIndex);
+    followLogs();
+};
+
+const followLogs = () => {
+    let latestPassedTest = $('.vhs-sidebar-status-passed').last();
+    if (!latestPassedTest.length) return;
+
+    if (!visible(latestPassedTest)) {
+        let scrollTop  = $('.vhs-sidebar').scrollTop();
+        $('.vhs-sidebar').stop().animate({
+            scrollTop: scrollTop + 500
+        });
+    }
 };
 
 const addEvent = (event, passed) => {
@@ -49,10 +64,6 @@ const styles = `<style>
         background: #FFF;
         border-left: 1px solid #DDD;
         overflow-y: auto;
-        //opacity: 0.25;
-    }
-    .vhs-sidebar:hover {
-        opacity: 1;
     }
     .vhs-sidebar-event {
         overflow: hidden;
@@ -73,10 +84,10 @@ const styles = `<style>
     }
     .vhs-sidebar-status {
         display: inline-block;
-        width: 5px;
-        height: 5px;
+        width: 7.5px;
+        height: 7.5px;
         border-radius: 50%;
-        margin: 2.5px 5px;
+        margin: 2px 5px;
     }
     .vhs-sidebar-status-pending {
         background-color: orange;
