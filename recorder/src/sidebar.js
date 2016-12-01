@@ -29,6 +29,7 @@ const followLogs = () => {
 
 const addEvent = (index, lastEventIndex) => {
     let event = events[index];
+    event.index = index;
 
     event.status = index <= lastEventIndex ? 'passed': 'pending';
 
@@ -139,15 +140,17 @@ const html = `
 `;
 
 const getDetailHTML = (data, type) => {
-    console.log(data);
     if (!data) return ``;
     if (type === 'duration') data = `&#128337; ${data}`;
     return `<span class="vhs-sidebar-event-${type}">${data}</span>`;
 };
 
-const getNewEventHTML = ({type, duration, key, identifier, status}) => {
+const getNewEventHTML = ({type, duration, key, identifier, status, index}) => {
     return `
-        <div class="vhs-sidebar-event vhs-sidebar-event-${status}">
+        <div
+            class="vhs-sidebar-event vhs-sidebar-event-${status}"
+            data-index=${index}
+            >
             <span class="vhs-sidebar-status"></span>
             ${getDetailHTML(identifier, 'identifier')}
             ${getDetailHTML(duration, 'duration')}
