@@ -211,7 +211,11 @@ const playEventsRecursively = (index) => {
 
 let isRecording = false;
 const toggleRecording = () => {
-    if (isRecording) stopRecording();
+    if (isRecording) {
+        stopRecording()
+        bunker.storeTape(events);
+    }
+
     else record();
     controls.toggleRecordingState();
 };
@@ -224,9 +228,7 @@ const record = () => {
 const stopRecording = () => {
     detachHandlers();
     isRecording = false;
-    let tape = JSON.stringify({events});
-    localStorage.setItem('vhs', tape);
-    bunker.storeTape(tape);
+    localStorage.setItem('vhs', JSON.stringify({events}));
 };
 
 const resumeRecording = () => {
