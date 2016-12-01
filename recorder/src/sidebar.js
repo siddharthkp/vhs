@@ -6,9 +6,12 @@ const show = () => {
     $('body').append(html);
 };
 
-const render = (events, lastEventIndex) => {
+let events = [];
+
+const render = (eventsArray, lastEventIndex) => {
     $('.vhs-sidebar-events').empty();
-    for (let i = 0; i < events.length; i++) addEvent(events[i], i <= lastEventIndex ? 'passed': 'pending');
+    events = eventsArray;
+    for (let i = 0; i < events.length; i++) addEvent(i, lastEventIndex);
     followLogs();
 };
 
@@ -24,15 +27,17 @@ const followLogs = () => {
     }
 };
 
-const addEvent = (event, status) => {
-    event.status = status;
-    if (event.type === 'wait' && event.duration < 100) return;
+const addEvent = (index, lastEventIndex) => {
+    let event = events[index];
+
+    event.status = index <= lastEventIndex ? 'passed': 'pending';
+
+    if (event.type === 'wait' && event.duration < 300) return;
+
     event.identifier = getPrettyIdentifier(event.path);
-    if (event.which === 1) delete event.key; // click event
-    else if (event.which === 13) event.key = '↵';
-    else if (event.which === 8) event.key = '←';
-    else if (event.which === 32) event.key = '_'; //proxy for space
-    else if (event.which) event.key = String.fromCharCode(event.which);
+
+    if (event.which === 1) delete event.which; // click events
+    if (event.which) event.key = getPrettyKey(event.which);
 
     $('.vhs-sidebar-events').append(getNewEventHTML(event));
 };
@@ -51,6 +56,15 @@ const getPrettyIdentifier = (path) => {
     identifier += element.className ? `.${element.className}`: '';
     identifier += element.text ? `(${element.text})`: '';
     return identifier;
+};
+
+const getPrettyKey = (which) => {
+    let map = {
+        8: '←',
+        13: '↵',
+        32: '_' //proxy for space
+    }
+    return map[which] || String.fromCharCode(which);
 };
 
 const styles = `<style>
@@ -125,6 +139,7 @@ const html = `
 `;
 
 const getDetailHTML = (data, type) => {
+    console.log(data);
     if (!data) return ``;
     if (type === 'duration') data = `&#128337; ${data}`;
     return `<span class="vhs-sidebar-event-${type}">${data}</span>`;
@@ -134,7 +149,7 @@ const getNewEventHTML = ({type, duration, key, identifier, status}) => {
     return `
         <div class="vhs-sidebar-event vhs-sidebar-event-${status}">
             <span class="vhs-sidebar-status"></span>
-            ${getDetailHTML(identifier, 'path')}
+            ${getDetailHTML(identifier, 'identifier')}
             ${getDetailHTML(duration, 'duration')}
 
             ${getDetailHTML(key, 'key')}
