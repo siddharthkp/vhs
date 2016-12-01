@@ -32,7 +32,7 @@ const addEvent = (index, lastEventIndex) => {
 
     event.status = index <= lastEventIndex ? 'passed': 'pending';
 
-    if (event.type === 'wait' && event.duration < 100) return;
+    if (event.type === 'wait' && event.duration < 300) return;
 
     event.identifier = getPrettyIdentifier(event.path);
 
