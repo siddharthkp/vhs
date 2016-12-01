@@ -5,6 +5,7 @@ const xpath = require('simple-xpath-position');
 require('core-js/fn/array/includes');
 
 const controls = require('./controls');
+const sidebar = require('./sidebar');
 
 /* Whitelist of DOM events that are recorded */
 const eventTypes = ['click', 'keypress', 'dblclick'];
@@ -172,7 +173,6 @@ const wait = ({duration}, resolve) => {
 
 /* Play all recorded events */
 const play = () => {
-    events = JSON.parse(localStorage.getItem('vhs')).events;
     controls.togglePlayingState();
     playEventsRecursively(0);
 }
@@ -183,11 +183,28 @@ const setupPlayback = () => {
     location.reload();
 };
 
+const initPlayback = () => {
+    events = JSON.parse(localStorage.getItem('vhs')).events;
+    sidebar.show();
+    sidebar.render(events);
+    play();
+    localStorage.removeItem('vhs-playback');
+};
+
 const playEventsRecursively = (index) => {
     if (!events[index]) {
         controls.togglePlayingState();
         return;
     }
+    /*
+     * It's useful to re-render the sidebar because
+     * the element in an event might only enter the DOM
+     * after it's previous event.
+     * Passing last event index for marking progress
+     */
+    sidebar.render(events, index);
+
+    /* Play event */
     playEvent(events[index]).then(() => playEventsRecursively(++index));
 };
 
@@ -225,8 +242,5 @@ $(() => {
     controls.show();
 
     let playback = localStorage.getItem('vhs-playback');
-    if (playback) {
-        play();
-        localStorage.removeItem('vhs-playback');
-    }
+    if (playback) initPlayback();
 });
