@@ -11,7 +11,7 @@ const toggleRecordingState = () => {
 };
 
 const togglePlayingState = () => {
-    $('.vhs-play-button').toggleClass('vhs-playing');  
+    $('.vhs-play-button').toggleClass('vhs-playing');
 };
 
 const styles = `<style>
