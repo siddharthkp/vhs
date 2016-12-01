@@ -111,6 +111,8 @@ const playEvent = (event) => {
         */
         stopRecording();
 
+        if (event.paused) return;
+
         /*
         * All events return a promise which is resolved after
         * the event is completed. Useful for wait events
@@ -223,20 +225,29 @@ const record = () => {
 const stopRecording = () => {
     detachHandlers();
     isRecording = false;
-    localStorage.setItem('vhs', JSON.stringify({events}));
+    persistEvents();
 };
+
+const persistEvents = () => localStorage.setItem('vhs', JSON.stringify({events}));
 
 const resumeRecording = () => {
     attachHandlers();
     isRecording = true;
 };
 
+const debug = (index) => {
+    events[index].paused = !!!events[index].paused; // Toggle pause after this event
+    persistEvents();
+    sidebar.render(events);
+}
+
 $(() => {
     /* Expose public functions */
     window.vhs = {
         events,
         toggleRecording,
-        setupPlayback
+        setupPlayback,
+        debug
     }
     wrapBodyInRecordable();
     controls.show();

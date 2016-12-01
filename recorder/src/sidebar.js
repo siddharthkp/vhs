@@ -31,7 +31,9 @@ const addEvent = (index, lastEventIndex) => {
     let event = events[index];
     event.index = index;
 
-    event.status = index <= lastEventIndex ? 'passed': 'pending';
+    if (event.paused) event.status = 'paused';
+    else event.status = index <= lastEventIndex ? 'passed': 'pending';
+
 
     if (event.type === 'wait' && event.duration < 300) return;
 
@@ -125,6 +127,12 @@ const styles = `<style>
     .vhs-sidebar-event-failed .vhs-sidebar-status {
         background-color: red;
     }
+    .vhs-sidebar-event-paused {
+        color: orange;
+    }
+    .vhs-sidebar-event-paused .vhs-sidebar-status {
+        background-color: orange;
+    }
 </style>`;
 
 const html = `
@@ -151,7 +159,7 @@ const getNewEventHTML = ({type, duration, key, identifier, status, index}) => {
             class="vhs-sidebar-event vhs-sidebar-event-${status}"
             data-index=${index}
             >
-            <span class="vhs-sidebar-status"></span>
+            <span class="vhs-sidebar-status" onclick="vhs.debug(${index})"></span>
             ${getDetailHTML(identifier, 'identifier')}
             ${getDetailHTML(duration, 'duration')}
 
