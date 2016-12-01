@@ -6,6 +6,7 @@ require('core-js/fn/array/includes');
 
 const controls = require('./controls');
 const sidebar = require('./sidebar');
+const bunker = require('./bunker');
 
 /* Whitelist of DOM events that are recorded */
 const eventTypes = ['click', 'keypress', 'dblclick'];
@@ -223,7 +224,9 @@ const record = () => {
 const stopRecording = () => {
     detachHandlers();
     isRecording = false;
-    localStorage.setItem('vhs', JSON.stringify({events}));
+    let tape = JSON.stringify({events});
+    localStorage.setItem('vhs', tape);
+    bunker.storeTape(tape);
 };
 
 const resumeRecording = () => {
