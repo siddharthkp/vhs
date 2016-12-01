@@ -129,10 +129,10 @@ const styles = `<style>
         background-color: red;
     }
     .vhs-sidebar-event-paused {
-        color: #FFEFD5;
+        color: #ffd590;
     }
     .vhs-sidebar-event-paused .vhs-sidebar-status {
-        background-color: #FFEFD5;
+        background-color: #ffd590;
     }
 </style>`;
 
