@@ -83,6 +83,7 @@ const styles = `<style>
         overflow-y: auto;
         color: #FFF;
         font-size: 14px;
+        font-family: monospace;
     }
     .vhs-sidebar-header {
         background: #1C2939;
@@ -119,19 +120,19 @@ const styles = `<style>
         background-color: #707C88;
     }
     .vhs-sidebar-event-passed {
-        color: #2EAADE;
+        color: #8EDFBA;
     }
     .vhs-sidebar-event-passed .vhs-sidebar-status {
-        background-color: #2EAADE;
+        background-color: #8EDFBA;
     }
     .vhs-sidebar-event-failed .vhs-sidebar-status {
         background-color: red;
     }
     .vhs-sidebar-event-paused {
-        color: orange;
+        color: #FFEFD5;
     }
     .vhs-sidebar-event-paused .vhs-sidebar-status {
-        background-color: orange;
+        background-color: #FFEFD5;
     }
 </style>`;
 
