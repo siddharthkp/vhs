@@ -1,0 +1,7 @@
+{
+    "apiKey": "secret",
+    "authDomain": "secret",
+    "databaseURL": "secret",
+    "storageBucket": "secret",
+    "messagingSenderId": "secret"
+};
