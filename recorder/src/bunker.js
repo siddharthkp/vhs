@@ -1,9 +1,9 @@
-const appConfig = require('../.firebaseconfig.json');
+const appConfig = require('../firebaseconfig.json');
 firebase.initializeApp(appConfig);
+const dbLocation = appConfig.databaseURL;
 const newTapeRef = firebase.database().ref('tapes');
 
 const storeTape = (tape) => {
-    console.log(tape);
     newTapeRef.push({
         'name': 'demo',
         'events': tape
@@ -12,6 +12,11 @@ const storeTape = (tape) => {
     });
 }
 
+const fetchTapes = () => {
+    return fetch(`${dbLocation}/tapes.json`); 
+}
+
 module.exports = {
-    storeTape
+    storeTape,
+    fetchTapes
 }

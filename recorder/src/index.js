@@ -183,7 +183,7 @@ const setupPlayback = () => {
     localStorage.setItem('vhs-playback', true);
     location.reload();
 };
-
+sidebar.show();
 const initPlayback = () => {
     events = JSON.parse(localStorage.getItem('vhs')).events;
     sidebar.show();

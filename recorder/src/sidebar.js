@@ -1,6 +1,7 @@
 const xpath = require('simple-xpath-position');
 const visible = require('withinviewport');
 window.visble = visible;
+const bunker = require('./bunker');
 
 const show = () => {
     $('body').append(html);
@@ -39,8 +40,36 @@ const addEvent = (index, lastEventIndex) => {
     if (event.which === 1) delete event.which; // click events
     if (event.which) event.key = getPrettyKey(event.which);
 
-    $('.vhs-sidebar-events').append(getNewEventHTML(event));
+    // $('.vhs-sidebar-events').append(getNewEventHTML(event));
 };
+
+const addTapes = () => {
+    let tapesPromise = bunker.fetchTapes(); 
+    tapesPromise.then( response => {
+        if (response.ok) {
+            response.json().then((data) => {
+                mountTapes(data);
+            });
+        } else {
+            console.log('Errored');
+        }
+    });
+}
+addTapes();
+
+const mountTapes = (tapesDump) => {
+    let tapes = Object.keys(tapesDump);
+    let tapeHtml = `<ul>`
+    tapes.forEach(tape => {
+        tapeHtml += `<li>${tape} <ul>`;
+        tapesDump[tape].events.forEach(ev => {
+            tapeHtml += `<li>${getNewEventHTML(ev)}</li>`;
+        });
+        tapeHtml += `</ul></li>`;
+    });
+    tapeHtml += `</ul>`;
+    $('.vhs-sidebar-events').append(tapeHtml);
+}
 
 const getPrettyIdentifier = (path) => {
     let identifier = '';
