@@ -111,7 +111,7 @@ const styles = `<style>
         width: 7.5px;
         height: 7.5px;
         border-radius: 50%;
-        margin: 2px 5px;
+        margin: 0 5px;
     }
     .vhs-sidebar-event-pending {
         color: #707C88;
@@ -170,7 +170,18 @@ const getNewEventHTML = ({type, duration, key, identifier, status, index}) => {
     `;
 };
 
+const toggleBreakpoint = (index) => {
+    let selector = `.vhs-sidebar-event[data-index=${index}]`;
+    $(selector).toggleClass('vhs-sidebar-event-paused');
+
+    /* Set pending or passed state based on lastPassedTest */
+    let lastPassedTest = $('.vhs-sidebar-event-passed').last();
+    if (index < lastPassedTest.data('index')) $(selector).toggleClass('vhs-sidebar-event-passed');
+    else $(selector).toggleClass('vhs-sidebar-event-pending');
+};
+
 module.exports = {
     show,
-    render
+    render,
+    toggleBreakpoint
 }

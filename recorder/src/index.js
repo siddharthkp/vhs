@@ -111,7 +111,15 @@ const playEvent = (event) => {
         */
         stopRecording();
 
-        if (event.paused) return;
+        /* In debug mode, don't play the event.
+         * Not resolving the promise freezes the playback on this step
+         * To replay again, call playEvent with the next event explicitly
+         */
+        if (event.paused) {
+            vhs.paused_at = event.index;
+            controls.togglePausedState();
+            return;
+        }
 
         /*
         * All events return a promise which is resolved after
@@ -193,6 +201,12 @@ const initPlayback = () => {
     localStorage.removeItem('vhs-playback');
 };
 
+const resumePlayback = () => {
+    let index = vhs.paused_at;
+    controls.togglePausedState();
+    playEventsRecursively(++index);
+};
+
 const playEventsRecursively = (index) => {
     if (!events[index]) {
         controls.togglePlayingState();
@@ -238,7 +252,7 @@ const resumeRecording = () => {
 const debug = (index) => {
     events[index].paused = !!!events[index].paused; // Toggle pause after this event
     persistEvents();
-    sidebar.render(events);
+    sidebar.toggleBreakpoint(index);
 }
 
 $(() => {
@@ -247,7 +261,8 @@ $(() => {
         events,
         toggleRecording,
         setupPlayback,
-        debug
+        debug,
+        resumePlayback
     }
     wrapBodyInRecordable();
     controls.show();
