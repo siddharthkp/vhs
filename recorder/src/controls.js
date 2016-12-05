@@ -14,6 +14,11 @@ const togglePlayingState = () => {
     $('.vhs-play-button').toggleClass('vhs-playing');
 };
 
+const togglePausedState = () => {
+    $('.vhs-play-button').toggleClass('inline-block');
+    $('.vhs-resume-button').toggleClass('inline-block');
+};
+
 const styles = `<style>
     .vhs-controls {
         position: absolute;
@@ -45,6 +50,9 @@ const styles = `<style>
         50%  {opacity: 0}
         100% {opacity: 1}
     }
+    .vhs-play-button, .vhs-resume-button {
+        display: none;
+    }
     .vhs-playing {
         background: #00ADE9;
         border-color: #00ADE9;
@@ -52,10 +60,17 @@ const styles = `<style>
     .vhs-playing .vhs-play-triangle {
         background: #FFF;
     }
+    .vhs-resume-button {
+        background: #ffd590;
+        border-color: #ffd590;
+    }
     .vhs-play-triangle {
         background-color: #666;
         display: inline-block;
         margin: 12px;
+    }
+    .vhs-resume-button .vhs-play-triangle {
+        background: #FFF;
     }
     .vhs-play-triangle:before,
     .vhs-play-triangle:after {
@@ -79,6 +94,9 @@ const styles = `<style>
     .vhs-play-triangle:after {
         transform: rotate(135deg) skewY(-45deg) scale(.707, 1.414) translate(50%);
     }
+    .vhs-controls .inline-block {
+        display: inline-block !important;
+    }
 </style>`;
 
 const html = `
@@ -87,7 +105,10 @@ const html = `
         <span class="vhs-button" onclick="vhs.toggleRecording()">
             <span class="vhs-record-circle"></span>
         </span>
-        <span class="vhs-button vhs-play-button" onclick="vhs.setupPlayback()">
+        <span class="vhs-button vhs-play-button inline-block" onclick="vhs.setupPlayback()">
+            <span class="vhs-play-triangle"></span>
+        </span>
+        <span class="vhs-button vhs-resume-button" onclick="vhs.resumePlayback()">
             <span class="vhs-play-triangle"></span>
         </span>
     </div>
@@ -96,5 +117,6 @@ const html = `
 module.exports = {
     show,
     toggleRecordingState,
-    togglePlayingState
+    togglePlayingState,
+    togglePausedState
 }
