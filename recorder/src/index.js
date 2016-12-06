@@ -219,6 +219,7 @@ const playEventsRecursively = (index) => {
      * Passing last event index for marking progress
      */
     sidebar.render(events, index);
+    console.log(events[index]);
 
     /* Play event */
     playEvent(events[index]).then(() => playEventsRecursively(++index));
