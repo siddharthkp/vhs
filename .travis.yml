@@ -1,10 +1,11 @@
 language: node_js
 node_js:
   - "6"
+env:
+  - APP=recorder
+  - APPremote
 script:
-  - cd recorder && npm install && npm run build
-  - cd ..
-  - cd remote && npm install && npm test
+  - cd $APP && npm install && npm test
 notifications:
   email: false
 cache:
