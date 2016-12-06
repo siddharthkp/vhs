@@ -10,11 +10,11 @@ phantom.create()
 .then(instance => instance.createPage())
 /* All console messages should come to terminal */
 .then(page => {
-    page.property('onConsoleMessage', (msg) => {
-        console.log(msg);
+    page.property('onConsoleMessage', (message) => {
+        console.log(message);
     });
-    page.property('onError', (msg) => {
-        console.log(msg);
+    page.property('onError', (message) => {
+        console.log(message);
     });
     return page;
 })

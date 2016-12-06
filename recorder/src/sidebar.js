@@ -12,7 +12,14 @@ const render = (eventsArray, lastEventIndex) => {
     $('.vhs-sidebar-events').empty();
     events = eventsArray;
     for (let i = 0; i < events.length; i++) addEvent(i, lastEventIndex);
+    renderOnConsole(events);
     followLogs();
+};
+
+/* Used in remote mode for display */
+const renderOnConsole = (events) => {
+    console.clear();
+    console.log(JSON.stringify(events));
 };
 
 const followLogs = () => {

@@ -14,11 +14,11 @@ phantom.create()
 })
 /* All console messages should come to terminal */
 .then(function (page) {
-    page.property('onConsoleMessage', function (msg) {
-        console.log(msg);
+    page.property('onConsoleMessage', function (message) {
+        console.log(message);
     });
-    page.property('onError', function (msg) {
-        console.log(msg);
+    page.property('onError', function (message) {
+        console.log(message);
     });
     return page;
 }).then(function (page) {
