@@ -12,3 +12,4 @@ cache:
   directories:
     - node_modules
     - recorder/node_modules
+    - remote/node_modules
