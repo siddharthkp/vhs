@@ -18,7 +18,8 @@
   },
   "scripts": {
     "build": "browserify src -o dist.js",
-    "dev": "watchify -vd src -o dist.js"
+    "dev": "watchify -vd src -o dist.js",
+    "test": "npm run build"
   },
   "repository": {
     "type": "git",

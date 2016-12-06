@@ -8,16 +8,29 @@ let url = 'http://localhost:3000';
 if (process.env.CI) url = 'https://siddharthkp.github.io/vhs/demo';
 
 const prettyOut = (message) => {
-    clear();
     let events = JSON.parse(message);
     let render = events.map(event => {
-        let prettyEvent = `${event.index} ${event.type} ${event.which}`;
+        let prettyEvent = `${event.index} ${event.type} ${event.which || ''}`;
         if (event.status === 'pending') return gray(prettyEvent)
         else if (event.status === 'passed') return green(prettyEvent)
         else return gray(prettyEvent);
     });
-    console.log(render.join('\n'));
+
+    /* Skip continous rendering on CI as we can't clear() */
+    if (!process.env.CI) {
+        clear();
+        console.log(render.join('\n'));
+    }
+
+    /* End of tests */
+    if (events.pop().status !== 'pending') {
+        clear();
+        console.log(render.join('\n'));
+        phantomInstance.exit();
+    }
 };
+
+let phantomInstance;
 
 /* Create phantom instance */
 phantom.create([], {
@@ -25,6 +38,7 @@ phantom.create([], {
 })
 /* New page instance */
 .then(instance => {
+    phantomInstance = instance;
     return instance.createPage();
 })
 /* All console messages should come to terminal */
@@ -33,7 +47,7 @@ phantom.create([], {
         console.log(message);
     });
     page.property('onError', (message) => {
-        //console.log(message);
+        console.log(message);
     });
     return page;
 })
@@ -47,5 +61,5 @@ phantom.create([], {
     }, testEvents);
 })
 .then(res => {
-    console.log(res);
+    console.log(yellow('Running tests'));
 });
