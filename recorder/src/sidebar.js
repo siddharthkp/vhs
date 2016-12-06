@@ -30,8 +30,11 @@ const followLogs = () => {
 
 const addEvent = (index, lastEventIndex) => {
     let event = events[index];
+    event.index = index;
 
-    event.status = index <= lastEventIndex ? 'passed': 'pending';
+    if (event.paused) event.status = 'paused';
+    else event.status = index <= lastEventIndex ? 'passed': 'pending';
+
 
     if (event.type === 'wait' && event.duration < 300) return;
 
@@ -94,6 +97,7 @@ const styles = `<style>
         overflow-y: auto;
         color: #FFF;
         font-size: 14px;
+        font-family: monospace;
     }
     .vhs-sidebar-header {
         background: #1C2939;
@@ -121,7 +125,7 @@ const styles = `<style>
         width: 7.5px;
         height: 7.5px;
         border-radius: 50%;
-        margin: 2px 5px;
+        margin: 0 5px;
     }
     .vhs-sidebar-event-pending {
         color: #707C88;
@@ -130,13 +134,19 @@ const styles = `<style>
         background-color: #707C88;
     }
     .vhs-sidebar-event-passed {
-        color: #2EAADE;
+        color: #8EDFBA;
     }
     .vhs-sidebar-event-passed .vhs-sidebar-status {
-        background-color: #2EAADE;
+        background-color: #8EDFBA;
     }
     .vhs-sidebar-event-failed .vhs-sidebar-status {
         background-color: red;
+    }
+    .vhs-sidebar-event-paused {
+        color: #ffd590;
+    }
+    .vhs-sidebar-event-paused .vhs-sidebar-status {
+        background-color: #ffd590;
     }
 </style>`;
 
@@ -153,16 +163,18 @@ const html = `
 `;
 
 const getDetailHTML = (data, type) => {
-    console.log(data);
     if (!data) return ``;
     if (type === 'duration') data = `&#128337; ${data}`;
     return `<span class="vhs-sidebar-event-${type}">${data}</span>`;
 };
 
-const getNewEventHTML = ({type, duration, key, identifier, status}) => {
+const getNewEventHTML = ({type, duration, key, identifier, status, index}) => {
     return `
-        <div class="vhs-sidebar-event vhs-sidebar-event-${status}">
-            <span class="vhs-sidebar-status"></span>
+        <div
+            class="vhs-sidebar-event vhs-sidebar-event-${status}"
+            data-index=${index}
+            >
+            <span class="vhs-sidebar-status" onclick="vhs.debug(${index})"></span>
             ${getDetailHTML(identifier, 'identifier')}
             ${getDetailHTML(duration, 'duration')}
 
@@ -172,7 +184,18 @@ const getNewEventHTML = ({type, duration, key, identifier, status}) => {
     `;
 };
 
+const toggleBreakpoint = (index) => {
+    let selector = `.vhs-sidebar-event[data-index=${index}]`;
+    $(selector).toggleClass('vhs-sidebar-event-paused');
+
+    /* Set pending or passed state based on lastPassedTest */
+    let lastPassedTest = $('.vhs-sidebar-event-passed').last();
+    if (index < lastPassedTest.data('index')) $(selector).toggleClass('vhs-sidebar-event-passed');
+    else $(selector).toggleClass('vhs-sidebar-event-pending');
+};
+
 module.exports = {
     show,
-    render
+    render,
+    toggleBreakpoint
 }
