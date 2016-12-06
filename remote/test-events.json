@@ -1,0 +1,210 @@
+{
+    "events": [
+      {
+        "type": "wait",
+        "duration": 0,
+        "status": "passed"
+      },
+      {
+        "type": "click",
+        "path": "/html[1]/body[1]/div[1]/section[1]/header[1]/input[1]",
+        "status": "passed",
+        "identifier": "INPUT#new-todo"
+      },
+      {
+        "type": "wait",
+        "duration": 363,
+        "status": "passed",
+        "identifier": ""
+      },
+      {
+        "type": "keypress",
+        "which": 102,
+        "path": "/html[1]/body[1]/div[1]/section[1]/header[1]/input[1]",
+        "status": "passed",
+        "identifier": "INPUT#new-todo",
+        "key": "f"
+      },
+      {
+        "type": "wait",
+        "duration": 115,
+        "status": "passed"
+      },
+      {
+        "type": "keypress",
+        "which": 105,
+        "path": "/html[1]/body[1]/div[1]/section[1]/header[1]/input[1]",
+        "status": "passed",
+        "identifier": "INPUT#new-todo",
+        "key": "i"
+      },
+      {
+        "type": "wait",
+        "duration": 453,
+        "status": "passed",
+        "identifier": ""
+      },
+      {
+        "type": "keypress",
+        "which": 114,
+        "path": "/html[1]/body[1]/div[1]/section[1]/header[1]/input[1]",
+        "status": "passed",
+        "identifier": "INPUT#new-todo",
+        "key": "r"
+      },
+      {
+        "type": "wait",
+        "duration": 89,
+        "status": "passed"
+      },
+      {
+        "type": "keypress",
+        "which": 115,
+        "path": "/html[1]/body[1]/div[1]/section[1]/header[1]/input[1]",
+        "status": "passed",
+        "identifier": "INPUT#new-todo",
+        "key": "s"
+      },
+      {
+        "type": "wait",
+        "duration": 142,
+        "status": "passed"
+      },
+      {
+        "type": "keypress",
+        "which": 116,
+        "path": "/html[1]/body[1]/div[1]/section[1]/header[1]/input[1]",
+        "status": "passed",
+        "identifier": "INPUT#new-todo",
+        "key": "t"
+      },
+      {
+        "type": "wait",
+        "duration": 137,
+        "status": "passed"
+      },
+      {
+        "type": "keypress",
+        "which": 13,
+        "path": "/html[1]/body[1]/div[1]/section[1]/header[1]/input[1]",
+        "status": "passed",
+        "identifier": "INPUT#new-todo",
+        "key": "↵"
+      },
+      {
+        "type": "wait",
+        "duration": 216,
+        "status": "passed"
+      },
+      {
+        "type": "keypress",
+        "which": 115,
+        "path": "/html[1]/body[1]/div[1]/section[1]/header[1]/input[1]",
+        "status": "passed",
+        "identifier": "INPUT#new-todo",
+        "key": "s"
+      },
+      {
+        "type": "wait",
+        "duration": 180,
+        "status": "passed"
+      },
+      {
+        "type": "keypress",
+        "which": 101,
+        "path": "/html[1]/body[1]/div[1]/section[1]/header[1]/input[1]",
+        "status": "passed",
+        "identifier": "INPUT#new-todo",
+        "key": "e"
+      },
+      {
+        "type": "wait",
+        "duration": 151,
+        "status": "passed"
+      },
+      {
+        "type": "keypress",
+        "which": 99,
+        "path": "/html[1]/body[1]/div[1]/section[1]/header[1]/input[1]",
+        "status": "passed",
+        "identifier": "INPUT#new-todo",
+        "key": "c"
+      },
+      {
+        "type": "wait",
+        "duration": 118,
+        "status": "passed"
+      },
+      {
+        "type": "keypress",
+        "which": 111,
+        "path": "/html[1]/body[1]/div[1]/section[1]/header[1]/input[1]",
+        "status": "passed",
+        "identifier": "INPUT#new-todo",
+        "key": "o"
+      },
+      {
+        "type": "wait",
+        "duration": 41,
+        "status": "passed"
+      },
+      {
+        "type": "keypress",
+        "which": 110,
+        "path": "/html[1]/body[1]/div[1]/section[1]/header[1]/input[1]",
+        "status": "passed",
+        "identifier": "INPUT#new-todo",
+        "key": "n"
+      },
+      {
+        "type": "wait",
+        "duration": 62,
+        "status": "passed"
+      },
+      {
+        "type": "keypress",
+        "which": 100,
+        "path": "/html[1]/body[1]/div[1]/section[1]/header[1]/input[1]",
+        "status": "passed",
+        "identifier": "INPUT#new-todo",
+        "key": "d"
+      },
+      {
+        "type": "wait",
+        "duration": 162,
+        "status": "passed"
+      },
+      {
+        "type": "keypress",
+        "which": 13,
+        "path": "/html[1]/body[1]/div[1]/section[1]/header[1]/input[1]",
+        "status": "passed",
+        "identifier": "INPUT#new-todo",
+        "key": "↵"
+      },
+      {
+        "type": "wait",
+        "duration": 1085,
+        "status": "passed",
+        "identifier": ""
+      },
+      {
+        "type": "click",
+        "path": "/html[1]/body[1]/div[1]/section[1]/section[1]/ul[1]/li[1]/div[1]/input[1]",
+        "status": "passed",
+        "identifier": "INPUT.toggle"
+      },
+      {
+        "type": "wait",
+        "duration": 701,
+        "status": "passed",
+        "identifier": ""
+      },
+      {
+        "type": "click",
+        "path": "/html[1]/body[1]/div[1]/section[1]/section[1]/ul[1]/li[2]/div[1]/input[1]",
+        "status": "passed",
+        "identifier": "INPUT.toggle"
+      }
+    ]
+}

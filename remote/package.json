@@ -1,0 +1,36 @@
+{
+  "name": "vhs-remote-player",
+  "version": "0.0.1",
+  "description": "Play recorded taps remotely",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel index.js -o lib.js",
+    "test": "npm run build && phantomjs lib.js",
+    "debug": "npm run build && phantomjs --remote-debugger-port=9001 --remote-debugger-autorun=yes lib.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/siddharthkp/vhs.git"
+  },
+  "keywords": [
+    "vhs",
+    "remote"
+  ],
+  "author": "siddharthkp",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/siddharthkp/vhs/issues"
+  },
+  "homepage": "https://github.com/siddharthkp/vhs#readme",
+  "dependencies": {
+    "babel-cli": "6.18.0",
+    "babel-preset-es2015": "6.18.0",
+    "phantomjs": "2.1.7",
+    "webpage": "0.3.0"
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  }
+}
