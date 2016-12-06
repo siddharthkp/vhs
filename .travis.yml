@@ -3,6 +3,7 @@ node_js:
   - "6"
 script:
   - cd recorder && npm install && npm run build
+  - cd remote && npm install && npm test
 notifications:
   email: false
 cache:
