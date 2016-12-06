@@ -10,7 +10,7 @@ if (process.env.CI) url = 'https://siddharthkp.github.io/vhs/demo';
 const prettyOut = (message) => {
     let events = JSON.parse(message);
     let render = events.map(event => {
-        let prettyEvent = `${event.index} ${event.type} ${event.which}`;
+        let prettyEvent = `${event.index} ${event.type} ${event.which || ''}`;
         if (event.status === 'pending') return gray(prettyEvent)
         else if (event.status === 'passed') return green(prettyEvent)
         else return gray(prettyEvent);

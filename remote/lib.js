@@ -18,7 +18,7 @@ if (process.env.CI) url = 'https://siddharthkp.github.io/vhs/demo';
 var prettyOut = function prettyOut(message) {
     var events = JSON.parse(message);
     var render = events.map(function (event) {
-        var prettyEvent = event.index + ' ' + event.type + ' ' + event.which;
+        var prettyEvent = event.index + ' ' + event.type + ' ' + (event.which || '');
         if (event.status === 'pending') return gray(prettyEvent);else if (event.status === 'passed') return green(prettyEvent);else return gray(prettyEvent);
     });
 
