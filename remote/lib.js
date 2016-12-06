@@ -12,7 +12,7 @@ var _require = require('chalk'),
 
 
 var testEvents = JSON.stringify(require('./test-events.json'));
-var url = 'http://localhost:3000';
+var url = 'https://siddharthkp.github.io/vhs/demo';
 
 var prettyOut = function prettyOut(message) {
     clear();

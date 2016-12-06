@@ -4,7 +4,8 @@ const {gray, yellow, green} = require('chalk');
 
 /* Pre recorded vhs.events */
 const testEvents = JSON.stringify(require('./test-events.json'));
-const url = 'http://localhost:3000';
+let url = 'http://localhost:3000';
+if (process.env.CI) url = 'https://siddharthkp.github.io/vhs/demo';
 
 const prettyOut = (message) => {
     clear();
