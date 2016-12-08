@@ -12,7 +12,19 @@ const render = (eventsArray, lastEventIndex) => {
     $('.vhs-sidebar-events').empty();
     events = eventsArray;
     for (let i = 0; i < events.length; i++) addEvent(i, lastEventIndex);
+    renderOnConsole(events, lastEventIndex);
     followLogs();
+};
+
+/* Used in remote mode for display */
+const renderOnConsole = (events, lastEventIndex) => {
+    events = events.map(event => {
+        if (event.paused) event.status = 'paused';
+        else event.status = event.index <= lastEventIndex ? 'passed': 'pending';
+        return event;
+    });
+    console.clear();
+    console.log(JSON.stringify(events));
 };
 
 const followLogs = () => {
