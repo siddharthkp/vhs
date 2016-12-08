@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "babel-plugin-transform-promise-to-bluebird": "1.1.1",
-    "babel-preset-es2015": "6.18.0",
+    "babel-preset-es2015": "6.18.0"
   },
   "scripts": {
     "babelify": "7.3.0",

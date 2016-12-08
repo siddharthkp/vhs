@@ -39,3 +39,4 @@ jspm_packages
 
 # Config
 recorder/config.json
+recorder/.env
