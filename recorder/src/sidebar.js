@@ -1,7 +1,6 @@
 const xpath = require('simple-xpath-position');
 const visible = require('withinviewport');
 window.visble = visible;
-const bunker = require('./bunker');
 
 const show = () => {
     $('body').append(html);
@@ -45,19 +44,6 @@ const addEvent = (index, lastEventIndex) => {
 
     $('.vhs-sidebar-events').append(getNewEventHTML(event));
 };
-
-// const addTapes = () => {
-//     let tapesPromise = bunker.fetchTapes(); 
-//     tapesPromise.then( response => {
-//         if (response.ok) {
-//             response.json().then((data) => {
-//                 //Operate with tapes
-//             });
-//         } else {
-//             console.log('Errored');
-//         }
-//     });
-// }
 
 const getPrettyIdentifier = (path) => {
     let identifier = '';

@@ -226,9 +226,7 @@ const playEventsRecursively = (index) => {
 
 let isRecording = false;
 const toggleRecording = () => {
-    if (isRecording) {
-        stopRecording()
-    }
+    if (isRecording) stopRecording();
 
     else record();
     controls.toggleRecordingState();
