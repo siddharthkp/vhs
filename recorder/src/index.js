@@ -5,7 +5,6 @@ const xpath = require('simple-xpath-position');
 require('core-js/fn/array/includes');
 const controls = require('./controls');
 const sidebar = require('./sidebar');
-const bunker = require('./bunker');
 
 /* Whitelist of DOM events that are recorded */
 const eventTypes = ['click', 'keypress', 'dblclick'];
@@ -227,7 +226,6 @@ const playEventsRecursively = (index) => {
 let isRecording = false;
 const toggleRecording = () => {
     if (isRecording) stopRecording();
-
     else record();
     controls.toggleRecordingState();
 };
