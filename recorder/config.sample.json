@@ -4,4 +4,4 @@
     "databaseURL": "secret",
     "storageBucket": "secret",
     "messagingSenderId": "secret"
-};
+}

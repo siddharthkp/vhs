@@ -3,7 +3,6 @@ const xpath = require('simple-xpath-position');
 
 /* Polyfill for Array.prototype.includes */
 require('core-js/fn/array/includes');
-
 const controls = require('./controls');
 const sidebar = require('./sidebar');
 const bunker = require('./bunker');
