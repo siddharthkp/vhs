@@ -38,4 +38,4 @@ jspm_packages
 .DS_Store
 
 # Config
-recorder/firebaseconfig.json
+recorder/config.json
