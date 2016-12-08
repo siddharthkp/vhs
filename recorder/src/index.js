@@ -5,6 +5,7 @@ const xpath = require('simple-xpath-position');
 require('core-js/fn/array/includes');
 const controls = require('./controls');
 const sidebar = require('./sidebar');
+const store = require('./store');
 
 /* Whitelist of DOM events that are recorded */
 const eventTypes = ['click', 'keypress', 'dblclick'];
