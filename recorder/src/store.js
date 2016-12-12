@@ -1,10 +1,12 @@
-const appConfig = require('../config.json');
+const config = require('../config.json');
+
 const firebase = require('firebase');
-firebase.initializeApp(appConfig);
-const dbLocation = appConfig.databaseURL;
+firebase.initializeApp(config);
+
+const dbLocation = config.databaseURL;
 const newTapeRef = firebase.database().ref('tapes');
 
-const storeEvents = (name, events) => {
+const save = (name, events) => {
     newTapeRef.push({
         'name': name || 'Anonymous', //TODO: Change the name to name of the test
         'events': events
@@ -13,11 +15,11 @@ const storeEvents = (name, events) => {
     });
 }
 
-const fetchTapes = () => {
-    return fetch(`${dbLocation}/tapes.json`); 
+const get = () => {
+    return fetch(`${dbLocation}/tapes.json`);
 }
 
 module.exports = {
-    storeEvents,
-    fetchTapes
+    save,
+    get
 }

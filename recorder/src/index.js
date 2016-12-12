@@ -226,7 +226,10 @@ const playEventsRecursively = (index) => {
 
 let isRecording = false;
 const toggleRecording = () => {
-    if (isRecording) stopRecording();
+    if (isRecording) {
+        stopRecording();
+        store.save('Cool', events);
+    }
     else record();
     controls.toggleRecordingState();
 };
@@ -239,10 +242,12 @@ const record = () => {
 const stopRecording = () => {
     detachHandlers();
     isRecording = false;
-    persistEvents();
+    persistEventsLocally();
 };
 
-const persistEvents = () => localStorage.setItem('vhs', JSON.stringify({events}));
+const persistEventsLocally = () => {
+    localStorage.setItem('vhs', JSON.stringify({events}));
+};
 
 const resumeRecording = () => {
     attachHandlers();
@@ -251,7 +256,7 @@ const resumeRecording = () => {
 
 const debug = (index) => {
     events[index].paused = !!!events[index].paused; // Toggle pause after this event
-    persistEvents();
+    persistEventsLocally();
     sidebar.toggleBreakpoint(index);
 }
 
