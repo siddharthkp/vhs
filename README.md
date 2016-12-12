@@ -1,4 +1,4 @@
-![WIP](https://img.shields.io/badge/status-work_in_progress-yellow.svg)
+![WIP](https://img.shields.io/badge/status-work_in_progress-yellow.svg) [![Build Status](https://travis-ci.org/siddharthkp/vhs.svg?branch=master)](https://travis-ci.org/siddharthkp/vhs)
 
 ![logo](https://raw.githubusercontent.com/siddharthkp/vhs/master/logo.gif)
 
