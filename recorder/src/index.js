@@ -133,7 +133,7 @@ const playEvent = (event) => {
             else if (type === 'keypress') keypress(event, resolve);
             else if (type === 'key-combo') keyCombo(event, resolve);
             else if (type === 'wait') wait(event, resolve);
-            else reject(new Error('Unknown event type. Could not play'));
+            else reject(new Error(`Unknown event type: ${type}. Could not play`));
         }).then(() => {
             /* Re-attach handlers after event is played */
             resumeRecording(); //TODO: Don't attach in playback mode

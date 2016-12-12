@@ -22,7 +22,7 @@ var prettyOut = function prettyOut(message) {
         events = JSON.parse(message);
     } catch (err) {
         console.log(red(message));
-        return;
+        process.exit(1);
     }
     var render = events.map(function (event) {
         var prettyEvent = event.index + ' ' + event.type + ' ' + (event.duration || event.key || '');
