@@ -237,14 +237,13 @@ const playEventsRecursively = (index) => {
 
 let isRecording = false;
 const toggleRecording = () => {
-    if (isRecording) {
-        stopRecording();
-    }
+    if (isRecording) stopRecording();
     else record();
     controls.toggleRecordingState();
 };
 
 const saveRecording = () => {
+    if (isRecording) toggleRecording();
     /* Fetch locally persisted events */
     let events = JSON.parse(localStorage.getItem('vhs')).events;
     let name = prompt("What do you want to name this event?");
