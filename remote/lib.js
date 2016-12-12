@@ -2,6 +2,8 @@
 
 var phantom = require('phantom');
 var clear = require('clear');
+var http = require('http');
+var nodeStatic = require('node-static');
 
 var _require = require('chalk'),
     gray = _require.gray,
@@ -9,9 +11,14 @@ var _require = require('chalk'),
     green = _require.green,
     red = _require.red;
 
+var demo = new nodeStatic.Server('../demo');
+var server = http.createServer(function (request, response) {
+    request.addListener('end', function () {
+        return demo.serve(request, response);
+    }).resume();
+}).listen(3000);
+
 /* Pre recorded vhs.events */
-
-
 var testEvents = JSON.stringify(require('./test-events.json'));
 var url = 'http://localhost:3000';
 if (process.env.CI) url = 'https://siddharthkp.github.io/vhs/demo';
@@ -40,6 +47,7 @@ var prettyOut = function prettyOut(message) {
         clear();
         console.log(render.join('\n'));
         phantomInstance.exit();
+        server.close();
     }
 };
 
