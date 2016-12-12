@@ -187,9 +187,14 @@ const play = () => {
     playEventsRecursively(0);
 }
 
-const setupPlayback = () => {
+const setupPlayback = (remote) => {
+    /* Stop and persist recording */
     if (isRecording) toggleRecording();
+
+    /* Using localStorage as a persistent storage */
     localStorage.setItem('vhs-playback', true);
+    if (remote) localStorage.setItem('vhs-remote', true);
+
     location.reload();
 };
 
@@ -197,8 +202,13 @@ const initPlayback = () => {
     events = JSON.parse(localStorage.getItem('vhs')).events;
     sidebar.show();
     sidebar.render(events);
+
+    let remote = localStorage.getItem('vhs-remote');
+    if (remote) vhs.remote = true;
+
     play();
     localStorage.removeItem('vhs-playback');
+    localStorage.removeItem('vhs-remote');
 };
 
 const resumePlayback = () => {
@@ -273,5 +283,6 @@ $(() => {
     controls.show();
 
     let playback = localStorage.getItem('vhs-playback');
+
     if (playback) initPlayback();
 });

@@ -64,7 +64,7 @@ phantom.create([], {
     /* Can execute functions in page.evaluate */
     return page.evaluate(function (testEvents) {
         localStorage.setItem('vhs', testEvents);
-        window.vhs.setupPlayback();
+        window.vhs.setupPlayback(true); // true for remote flag
         return 'done';
     }, testEvents);
 }).then(function (res) {
