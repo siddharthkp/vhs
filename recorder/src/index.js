@@ -131,7 +131,7 @@ const playEvent = (event) => {
             if (type === 'click') click(event, resolve);
             if (type === 'dblclick') dblclick(event, resolve);
             else if (type === 'keypress') keypress(event, resolve);
-            else if (type === 'key-combo') keypressCombo(event, resolve);
+            else if (type === 'key-combo') keyCombo(event, resolve);
             else if (type === 'wait') wait(event, resolve);
             else reject(new Error('Unknown event type. Could not play'));
         }).then(() => {
@@ -178,7 +178,7 @@ const keypress = ({path, which}, resolve) => {
     if (resolve) resolve();
 };
 
-const keypressCombo = ({path, whichs}, resolve) => {
+const keyCombo = ({path, whichs}, resolve) => {
     for (let which of whichs) {
         keypress({path, which});
     }
