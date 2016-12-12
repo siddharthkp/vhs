@@ -94,6 +94,11 @@ const styles = `<style>
     .vhs-play-triangle:after {
         transform: rotate(135deg) skewY(-45deg) scale(.707, 1.414) translate(50%);
     }
+    .vhs-save-icon {
+        margin: 7.5px;
+        vertical-align: bottom;
+        display: inline-block;
+    }
     .vhs-controls .inline-block {
         display: inline-block !important;
     }
@@ -110,6 +115,9 @@ const html = `
         </span>
         <span class="vhs-button vhs-resume-button" onclick="vhs.resumePlayback()">
             <span class="vhs-play-triangle"></span>
+        </span>
+        <span class="vhs-button vhs-save-button" onclick="vhs.saveRecording()">
+            <span class="vhs-save-icon">&#128190;</span>
         </span>
     </div>
 `;
