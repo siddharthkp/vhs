@@ -12,4 +12,4 @@ const config = {
     messagingSenderId: process.env.messagingSenderId
 };
 
-fs.writeFile('config.json', JSON.stringify(config), 'utf8');
+fs.writeFileSync('config.json', JSON.stringify(config), 'utf8');
