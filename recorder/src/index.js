@@ -179,11 +179,11 @@ const keypress = ({path, which}, resolve) => {
 };
 
 const keyCombo = ({path, whichs}, resolve) => {
-    for (let which of whichs) {
-        keypress({path, which});
+    for (let i = 0; i < whichs.length; i++) {
+        keypress({path, which: whichs[i]});
     }
     resolve();
-}
+};
 
 const wait = ({duration}, resolve) => {
     setTimeout(() => resolve(), duration);
@@ -282,7 +282,7 @@ const mergeSubsequentKeyEvents = (events) => {
         let event = events[i];
         let nextEvent = events[i + 1];
         if (['keypress', 'key-combo'].indexOf(event.type) !== -1 && nextEvent.type === 'keypress') {
-            if (event.which !== 8 && nextEvent.which !== 8) {
+            if (isMergeable(event.which) && isMergeable(nextEvent.which)) {
                 event.type = 'key-combo';
                 if (!event.whichs) event.whichs = [event.which];
                 event.whichs = [...event.whichs, nextEvent.which];
@@ -293,6 +293,10 @@ const mergeSubsequentKeyEvents = (events) => {
         }
     }
     return events;
+}
+
+const isMergeable = (key) => {
+    return [8, 13].indexOf(key) === -1;
 }
 
 const resumeRecording = () => {
