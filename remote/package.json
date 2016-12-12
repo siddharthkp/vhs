@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "babel index.js -o lib.js",
-    "test": "npm run build && node lib.js"
+    "local": "url=http://localhost:3000 CI=true node lib.js",
+    "server": "url=http://localhost:3000 node lib.js",
+    "test": "npm run build && npm run local"
   },
   "repository": {
     "type": "git",

@@ -2,8 +2,6 @@
 
 var phantom = require('phantom');
 var clear = require('clear');
-var http = require('http');
-var nodeStatic = require('node-static');
 
 var _require = require('chalk'),
     gray = _require.gray,
@@ -11,16 +9,12 @@ var _require = require('chalk'),
     green = _require.green,
     red = _require.red;
 
-var demo = new nodeStatic.Server('../demo');
-var server = http.createServer(function (request, response) {
-    request.addListener('end', function () {
-        return demo.serve(request, response);
-    }).resume();
-}).listen(3000);
+var url = process.env.url;
+var server = void 0;
+if (process.env.CI) server = require('./test-server.js');
 
 /* Pre recorded vhs.events */
 var testEvents = JSON.stringify(require('./test-events.json'));
-var url = 'http://localhost:3000';
 
 var prettyOut = function prettyOut(message) {
     var events = [];
@@ -46,7 +40,7 @@ var prettyOut = function prettyOut(message) {
         clear();
         console.log(render.join('\n'));
         phantomInstance.exit();
-        server.close();
+        if (process.env.CI) server.close();
     }
 };
 
