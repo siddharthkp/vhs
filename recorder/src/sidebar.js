@@ -13,7 +13,6 @@ const render = (eventsArray, lastEventIndex) => {
     events = eventsArray;
     let prettyEvents = [];
     for (let i = 0; i < events.length; i++) {
-        if (events[i].type === 'wait' && events[i].duration < 300) continue;
         let event = getPrettyEvent(i, lastEventIndex);
         prettyEvents.push(event);
         $('.vhs-sidebar-events').append(getNewEventHTML(event));
@@ -51,6 +50,7 @@ const getPrettyEvent = (index, lastEventIndex) => {
 
     if (event.which === 1) delete event.which; // click events
     if (event.which) event.key = getPrettyKey(event.which);
+    if (event.whichs) event.key = event.whichs.map(which => getPrettyKey(which)).join('');
     return event;
 };
 
@@ -85,7 +85,7 @@ const getDetailHTML = (data, type) => {
     return `<span class="vhs-sidebar-event-${type}">${data}</span>`;
 };
 
-const getNewEventHTML = ({type, duration, key, identifier, status, index}) => {
+const getNewEventHTML = ({type, duration, key, keys, identifier, status, index}) => {
     return `
         <div
             class="vhs-sidebar-event vhs-sidebar-event-${status}"
