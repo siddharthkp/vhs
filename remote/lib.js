@@ -6,7 +6,8 @@ var clear = require('clear');
 var _require = require('chalk'),
     gray = _require.gray,
     yellow = _require.yellow,
-    green = _require.green;
+    green = _require.green,
+    red = _require.red;
 
 /* Pre recorded vhs.events */
 
@@ -16,9 +17,15 @@ var url = 'http://localhost:3000';
 if (process.env.CI) url = 'https://siddharthkp.github.io/vhs/demo';
 
 var prettyOut = function prettyOut(message) {
-    var events = JSON.parse(message);
+    var events = [];
+    try {
+        events = JSON.parse(message);
+    } catch (err) {
+        console.log(red(message));
+        process.exit(1);
+    }
     var render = events.map(function (event) {
-        var prettyEvent = event.index + ' ' + event.type + ' ' + (event.which || '');
+        var prettyEvent = event.index + ' ' + event.type + ' ' + (event.duration || event.key || '');
         if (event.status === 'pending') return gray(prettyEvent);else if (event.status === 'passed') return green(prettyEvent);else return gray(prettyEvent);
     });
 

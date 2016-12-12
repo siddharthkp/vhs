@@ -131,8 +131,9 @@ const playEvent = (event) => {
             if (type === 'click') click(event, resolve);
             if (type === 'dblclick') dblclick(event, resolve);
             else if (type === 'keypress') keypress(event, resolve);
+            else if (type === 'key-combo') keyCombo(event, resolve);
             else if (type === 'wait') wait(event, resolve);
-            else reject(new Error('Unknown event type. Could not play'));
+            else reject(new Error(`Unknown event type: ${type}. Could not play`));
         }).then(() => {
             /* Re-attach handlers after event is played */
             resumeRecording(); //TODO: Don't attach in playback mode
@@ -160,7 +161,7 @@ const dblclick = ({path}, resolve) => {
     resolve();
 };
 
-const keypress = ({path, which},resolve) => {
+const keypress = ({path, which}, resolve) => {
     let element = getElement(path);
     let currentValue = $(element).val();
     if (which === 8) {
@@ -174,6 +175,13 @@ const keypress = ({path, which},resolve) => {
     /* Trigger event */
     $(element).trigger(jQuery.Event('keydown', {which}));
     $(element).trigger(jQuery.Event('keyup', {which}));
+    if (resolve) resolve();
+};
+
+const keyCombo = ({path, whichs}, resolve) => {
+    for (let i = 0; i < whichs.length; i++) {
+        keypress({path, which: whichs[i]});
+    }
     resolve();
 };
 
@@ -252,7 +260,44 @@ const stopRecording = () => {
     persistEvents();
 };
 
-const persistEvents = () => localStorage.setItem('vhs', JSON.stringify({events}));
+const persistEvents = () => {
+    events = minify(events);
+    localStorage.setItem('vhs', JSON.stringify({events}));
+}
+
+const minify = (rawEvents) => {
+    let events = [];
+    events = removeTinyWaitEvents(rawEvents);
+    events = mergeSubsequentKeyEvents(events);
+    return events;
+}
+
+const removeTinyWaitEvents = (events) => {
+    return events.filter(({type, duration}) => type !== 'wait' || duration > 300);
+};
+
+const mergeSubsequentKeyEvents = (events) => {
+    if (events.length < 1) return events;
+    for (let i = 0; i < events.length - 1; i++) {
+        let event = events[i];
+        let nextEvent = events[i + 1];
+        if (['keypress', 'key-combo'].indexOf(event.type) !== -1 && nextEvent.type === 'keypress') {
+            if (isMergeable(event.which) && isMergeable(nextEvent.which)) {
+                event.type = 'key-combo';
+                if (!event.whichs) event.whichs = [event.which];
+                event.whichs = [...event.whichs, nextEvent.which];
+                delete event.which;
+                events.splice(i + 1, 1);
+                i--;
+            }
+        }
+    }
+    return events;
+}
+
+const isMergeable = (key) => {
+    return [8, 13].indexOf(key) === -1;
+}
 
 const resumeRecording = () => {
     attachHandlers();
