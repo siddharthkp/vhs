@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "list ."
+    "start": "serve ."
   },
   "dependencies": {
     "todomvc-common": "1.0.1",
@@ -10,6 +10,6 @@
     "director": "1.2.2"
   },
   "devDependencies": {
-    "list": "0.8.2"
+    "serve": "2.0.0"
   }
 }
