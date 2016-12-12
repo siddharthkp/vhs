@@ -21,7 +21,6 @@ var server = http.createServer(function (request, response) {
 /* Pre recorded vhs.events */
 var testEvents = JSON.stringify(require('./test-events.json'));
 var url = 'http://localhost:3000';
-if (process.env.CI) url = 'https://siddharthkp.github.io/vhs/demo';
 
 var prettyOut = function prettyOut(message) {
     var events = [];
