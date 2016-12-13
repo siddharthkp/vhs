@@ -11,7 +11,7 @@ var _require = require('chalk'),
 
 var url = process.env.url;
 var server = void 0;
-if (process.env.CI) server = require('./test-server.js');
+if (process.env.local) server = require('./test-server.js');
 
 /* Pre recorded vhs.events */
 var testEvents = JSON.stringify(require('./test-events.json'));
@@ -40,7 +40,7 @@ var prettyOut = function prettyOut(message) {
         clear();
         console.log(render.join('\n'));
         phantomInstance.exit();
-        if (process.env.CI) server.close();
+        if (process.env.local) server.close();
     }
 };
 

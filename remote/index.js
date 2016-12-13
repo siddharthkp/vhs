@@ -4,7 +4,7 @@ const {gray, yellow, green, red} = require('chalk');
 
 const url = process.env.url;
 let server;
-if (process.env.CI) server = require('./test-server.js');
+if (process.env.local) server = require('./test-server.js');
 
 /* Pre recorded vhs.events */
 const testEvents = JSON.stringify(require('./test-events.json'));
@@ -35,7 +35,7 @@ const prettyOut = (message) => {
         clear();
         console.log(render.join('\n'));
         phantomInstance.exit();
-        if (process.env.CI) server.close();
+        if (process.env.local) server.close();
     }
 };
 
