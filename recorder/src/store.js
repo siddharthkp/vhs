@@ -15,8 +15,9 @@ const save = (name, events) => {
     });
 }
 
+// Usage: store.get().then((data)=>{//Play with data})
 const get = () => {
-    return fetch(`${dbLocation}/tapes.json`);
+    return $.get(`${dbLocation}/tapes.json`).promise();
 }
 
 module.exports = {
