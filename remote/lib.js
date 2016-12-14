@@ -9,9 +9,13 @@ var _require = require('chalk'),
     green = _require.green,
     red = _require.red;
 
-var url = process.env.url;
+var url = void 0;
 var server = void 0;
-if (process.env.local) server = require('./test-server.js');
+
+if (process.env.local) {
+    server = require('./test-server.js');
+    url = 'http://localhost:3000';
+} else url = process.env.url;
 
 /* Pre recorded vhs.events */
 var testEvents = JSON.stringify(require('./test-events.json'));

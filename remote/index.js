@@ -2,9 +2,13 @@ const phantom = require('phantom');
 const clear = require('clear');
 const {gray, yellow, green, red} = require('chalk');
 
-const url = process.env.url;
+let url;
 let server;
-if (process.env.local) server = require('./test-server.js');
+
+if (process.env.local) {
+    server = require('./test-server.js');
+    url = 'http://localhost:3000';
+} else url = process.env.url;
 
 /* Pre recorded vhs.events */
 const testEvents = JSON.stringify(require('./test-events.json'));
