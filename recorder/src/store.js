@@ -10,8 +10,6 @@ const save = (name, events) => {
     newTapeRef.push({
         'name': name || 'Anonymous', //TODO: Change the name to name of the test
         'events': events
-    }).then(function (res) {
-        // Call back after pushing events
     });
 }
 
