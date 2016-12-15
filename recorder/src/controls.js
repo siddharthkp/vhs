@@ -24,6 +24,7 @@ const styles = `<style>
         position: absolute;
         top: 10px;
         left: 10px;
+        z-index: 99999;
     }
     .vhs-button {
         width: 30px;
