@@ -63,7 +63,7 @@ const recordEvent = (event) => {
     let syntheticEvent = {
         type: event.type,
         which: event.which,
-        path: xpath.fromNode(event.target, document.body)
+        path: xpath.fromNode(event.target, document)
     };
     events.push(syntheticEvent);
 
@@ -99,7 +99,7 @@ const getWaitEvent = () => {
 };
 
 const getElement = (path) => {
-    return xpath.toNode(path, document.body);
+    return xpath.toNode(path, document);
 };
 
 /* Play an event */
