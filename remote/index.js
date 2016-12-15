@@ -1,16 +1,28 @@
 const phantom = require('phantom');
 const clear = require('clear');
-const {gray, yellow, green} = require('chalk');
+const {gray, yellow, green, red} = require('chalk');
+
+let url;
+let server;
+
+if (process.env.local) {
+    server = require('./test-server.js');
+    url = 'http://localhost:3000';
+} else url = process.env.url;
 
 /* Pre recorded vhs.events */
 const testEvents = JSON.stringify(require('./test-events.json'));
-let url = 'http://localhost:3000';
-if (process.env.CI) url = 'https://siddharthkp.github.io/vhs/demo';
 
 const prettyOut = (message) => {
-    let events = JSON.parse(message);
+    let events = [];
+    try {
+        events = JSON.parse(message);
+    } catch (err) {
+        console.log(red(message));
+        process.exit(1);
+    }
     let render = events.map(event => {
-        let prettyEvent = `${event.index} ${event.type} ${event.which || ''}`;
+        let prettyEvent = `${event.index} ${event.type} ${event.duration || event.key || ''}`;
         if (event.status === 'pending') return gray(prettyEvent)
         else if (event.status === 'passed') return green(prettyEvent)
         else return gray(prettyEvent);
@@ -27,6 +39,7 @@ const prettyOut = (message) => {
         clear();
         console.log(render.join('\n'));
         phantomInstance.exit();
+        if (process.env.local) server.close();
     }
 };
 
