@@ -5,19 +5,23 @@
   "main": "src/index.js",
   "dependencies": {
     "draggabilly": "2.1.1",
+    "firebase": "^3.6.3",
     "simple-xpath-position": "2.0.2",
     "withinviewport": "1.0.0"
   },
   "devDependencies": {
     "babel-plugin-transform-promise-to-bluebird": "1.1.1",
     "babel-preset-es2015": "6.18.0",
+    "dotenv": "^2.0.0"
+  },
+  "scripts": {
     "babelify": "7.3.0",
     "bluebird": "3.4.6",
     "browserify": "13.1.1",
-    "watchify": "3.7.0"
-  },
-  "scripts": {
-    "build": "browserify src -o dist.js",
+    "watchify": "3.7.0",
+    "build:config": "node scripts/config.js",
+    "build:src": "browserify src -o dist.js",
+    "build": "npm run build:config && npm run build:src",
     "dev": "watchify -vd src -o dist.js",
     "test": "npm run build"
   },

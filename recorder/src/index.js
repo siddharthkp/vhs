@@ -3,9 +3,10 @@ const xpath = require('simple-xpath-position');
 
 /* Polyfill for Array.prototype.includes */
 require('core-js/fn/array/includes');
-
 const controls = require('./controls');
 const sidebar = require('./sidebar');
+const store = require('./store');
+window.store = store;
 
 /* Whitelist of DOM events that are recorded */
 const eventTypes = ['click', 'keypress', 'dblclick'];
@@ -249,6 +250,14 @@ const toggleRecording = () => {
     controls.toggleRecordingState();
 };
 
+const saveRecording = () => {
+    if (isRecording) toggleRecording();
+    /* Fetch locally persisted events */
+    let events = JSON.parse(localStorage.getItem('vhs')).events;
+    let name = prompt("What do you want to name this event?");
+    store.save(name, events);
+};
+
 const record = () => {
     events = [];
     resumeRecording();
@@ -257,13 +266,14 @@ const record = () => {
 const stopRecording = () => {
     detachHandlers();
     isRecording = false;
-    persistEvents();
+    persistEventsLocally();
 };
 
-const persistEvents = () => {
+
+const persistEventsLocally = () => {
     events = minify(events);
     localStorage.setItem('vhs', JSON.stringify({events}));
-}
+};
 
 const minify = (rawEvents) => {
     let events = [];
@@ -306,7 +316,7 @@ const resumeRecording = () => {
 
 const debug = (index) => {
     events[index].paused = !!!events[index].paused; // Toggle pause after this event
-    persistEvents();
+    persistEventsLocally();
     sidebar.toggleBreakpoint(index);
 }
 
@@ -317,7 +327,8 @@ $(() => {
         toggleRecording,
         setupPlayback,
         debug,
-        resumePlayback
+        resumePlayback,
+        saveRecording
     }
     wrapBodyInRecordable();
     controls.show();
