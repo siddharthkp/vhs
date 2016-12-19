@@ -58,12 +58,12 @@ const getPrettyIdentifier = (path) => {
     let identifier = '';
     if (!path) return identifier;
 
-    let element = xpath.toNode(path, document);
+    let element = xpath.toNode(path, document.body);
     if (!element) {
         return identifier;
     }
 
-    identifier += element.tagName ? `${element.tagName}`: '';
+    identifier += element.tagName ? `${element.tagName.toLowerCase()}`: '';
     identifier += element.id ? `#${element.id}`: '';
     identifier += element.className ? `.${element.className}`: '';
     identifier += element.text ? `(${element.text})`: '';
@@ -81,6 +81,9 @@ const getPrettyKey = (which) => {
 
 const getDetailHTML = (data, type) => {
     if (!data) return ``;
+    /* Hide labels for key events, it's already expressive, avoid clutter */
+    if (type === 'type' && (data === 'key-combo' || data === 'keypress')) return ``;
+
     if (type === 'duration') data = `&#128337; ${data}`;
     return `<span class="vhs-sidebar-event-${type}">${data}</span>`;
 };
