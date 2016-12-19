@@ -1,25 +1,11 @@
-const xpath = require('simple-xpath-position');
 const {select} = require('optimal-select');
 const visible = require('withinviewport');
-window.visble = visible;
 
-const show = () => {
-    $('body').append(html);
-};
+const show = () => $('body').append(html);
 
 let events = [];
 
-const getElement = (selector) => {
-    console.log(selector);
-    return document.querySelector(selector, {
-        ignore: {
-            attribute (name, value, defaultPredicate) {
-              // exclude HTML5 data attributes
-              return (/data-*/).test(name) || defaultPredicate(name, value)
-            }
-          }
-    });
-};
+const getElement = selector => document.querySelector(selector);
 
 const render = (eventsArray, lastEventIndex) => {
     $('.vhs-sidebar-events').empty();
@@ -59,7 +45,7 @@ const getPrettyEvent = (index, lastEventIndex) => {
     if (event.paused) event.status = 'paused';
     else event.status = index <= lastEventIndex ? 'passed': 'pending';
 
-    event.identifier = getPrettyIdentifier(event.path);
+    event.identifier = getPrettyIdentifier(event.selector);
 
     if (event.which === 1) delete event.which; // click events
     if (event.which) event.key = getPrettyKey(event.which);
@@ -67,11 +53,11 @@ const getPrettyEvent = (index, lastEventIndex) => {
     return event;
 };
 
-const getPrettyIdentifier = (path) => {
+const getPrettyIdentifier = (selector) => {
     let identifier = '';
-    if (!path) return identifier;
+    if (!selector) return identifier;
 
-    let element = getElement(path);
+    let element = getElement(selector);
     if (!element) {
         return identifier;
     }

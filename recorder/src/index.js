@@ -1,15 +1,4 @@
-/* Lib to get xpath for a DOM node */
-const xpath = require('simple-xpath-position');
-const {select, getMultiSelector} = require('optimal-select');
-
-const config = {
-    ignore: {
-        attribute (name, value, defaultPredicate) {
-          // exclude HTML5 data attributes
-          return (/data-*/).test(name) || defaultPredicate(name, value)
-        }
-      }
-};
+const {select} = require('optimal-select');
 
 /* Polyfill for Array.prototype.includes */
 require('core-js/fn/array/includes');
@@ -58,7 +47,7 @@ const recordEvent = (event) => {
     }
 
     /*
-     * We want to get the xpath of the DOM element.
+     * We want to get the query selector of the DOM element.
      *
      * Depending on the interface, the element might or
      * might not stay in the DOM tree after the event.
@@ -74,7 +63,7 @@ const recordEvent = (event) => {
     let syntheticEvent = {
         type: event.type,
         which: event.which,
-        path: getPath(event.target)
+        selector: getSelector(event.target)
     };
     events.push(syntheticEvent);
 
@@ -109,19 +98,18 @@ const getWaitEvent = () => {
     return event;
 };
 
-const getElement = (selector) => {
-    console.log(selector);
-    return document.querySelector(selector);
-};
-
-const getPath = (element) => {
-    return select(element, config);
-    //return xpath.fromNode(element, document);g
-}
+const getElement = selector => document.querySelector(selector);
 
 const getSelector = (element) => {
-    return getMultiSelector(element);
-};
+    return select(element, {
+        ignore: {
+            attribute (name, value, defaultPredicate) {
+                // exclude HTML5 data attributes
+                return (/data-*/).test(name) || defaultPredicate(name, value)
+            }
+        }
+    });
+}
 
 /* Play an event */
 const playEvent = (event) => {
@@ -171,20 +159,20 @@ const playEvent = (event) => {
  * resolve() must be called at the end of the function
  */
 
-const click = ({path}, resolve) => {
-    let element = getElement(path);
+const click = ({selector}, resolve) => {
+    let element = getElement(selector);
     $(element).trigger('click');
     resolve();
 };
 
-const dblclick = ({path}, resolve) => {
-    let element = getElement(path);
+const dblclick = ({selector}, resolve) => {
+    let element = getElement(selector);
     $(element).trigger('dblclick');
     resolve();
 };
 
-const keypress = ({path, which}, resolve) => {
-    let element = getElement(path);
+const keypress = ({selector, which}, resolve) => {
+    let element = getElement(selector);
     let currentValue = $(element).val();
     if (which === 8) {
         /* Manually handle backspace */
@@ -200,9 +188,9 @@ const keypress = ({path, which}, resolve) => {
     if (resolve) resolve();
 };
 
-const keyCombo = ({path, whichs}, resolve) => {
+const keyCombo = ({selector, whichs}, resolve) => {
     for (let i = 0; i < whichs.length; i++) {
-        keypress({path, which: whichs[i]});
+        keypress({selector, which: whichs[i]});
     }
     resolve();
 };
@@ -303,7 +291,7 @@ const flattenAppEvents = () => {
                     }
                     if (!finalElement || finalElement.length === 0) finalElement = allElements[i];
                     flatEvents.push({
-                        path: getPath(finalElement),
+                        selector: getSelector(finalElement),
                         selector: event.selector,
                         type: event.type,
                         handler: event.handler
@@ -315,7 +303,7 @@ const flattenAppEvents = () => {
 
     $(document).find('*').off();
     for (let event of flatEvents) {
-        let attachTo = event.path;
+        let attachTo = event.selector;
         if (event.selector) attachTo + ' ' + event.selector;
         $(document).on(event.type, attachTo, event.handler);
     }
