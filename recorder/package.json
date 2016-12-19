@@ -4,15 +4,18 @@
   "description": "tape based ui testing",
   "main": "src/index.js",
   "dependencies": {
+    "bluebird": "3.4.6",
     "draggabilly": "2.1.1",
-    "firebase": "^3.6.3",
+    "firebase": "3.6.3",
     "optimal-select": "3.5.0",
     "withinviewport": "1.0.0"
   },
   "devDependencies": {
-    "babel-plugin-transform-promise-to-bluebird": "1.1.1",
-    "babel-preset-es2015": "6.18.0",
-    "dotenv": "^2.0.0"
+    "babel-plugin-transform-promise-to-bluebird": "^1.1.1",
+    "babel-preset-es2015": "^6.18.0",
+    "babelify": "^7.3.0",
+    "dotenv": "^2.0.0",
+    "watchify": "^3.7.0"
   },
   "scripts": {
     "babelify": "7.3.0",
