@@ -1,5 +1,15 @@
 /* Lib to get xpath for a DOM node */
 const xpath = require('simple-xpath-position');
+const {select, getMultiSelector} = require('optimal-select');
+
+const config = {
+    ignore: {
+        attribute (name, value, defaultPredicate) {
+          // exclude HTML5 data attributes
+          return (/data-*/).test(name) || defaultPredicate(name, value)
+        }
+      }
+};
 
 /* Polyfill for Array.prototype.includes */
 require('core-js/fn/array/includes');
@@ -99,16 +109,18 @@ const getWaitEvent = () => {
     return event;
 };
 
-const getElement = (path) => {
-    return xpath.toNode(path, document);
+const getElement = (selector) => {
+    console.log(selector);
+    return document.querySelector(selector);
 };
 
 const getPath = (element) => {
-    return xpath.fromNode(element, document);
+    return select(element, config);
+    //return xpath.fromNode(element, document);g
 }
 
 const getSelector = (element) => {
-
+    return getMultiSelector(element);
 };
 
 /* Play an event */
@@ -161,7 +173,7 @@ const playEvent = (event) => {
 
 const click = ({path}, resolve) => {
     let element = getElement(path);
-    element.click();
+    $(element).trigger('click');
     resolve();
 };
 
@@ -189,25 +201,10 @@ const keypress = ({path, which}, resolve) => {
 };
 
 const keyCombo = ({path, whichs}, resolve) => {
-    /*
-        Playing key events with a tiny gap
-        for a smooth animation with the sidebar
-        In remote mode, we can't see the UI,
-        optimising for faster build times there.
-    */
-    let keyComboGap = 100;
-    if (vhs.remote) keyComboGap = 0;
-
-    let i = 0;
-    let interval = window.setInterval(() => {
-        if (!whichs[i]) {
-            window.clearInterval(interval);
-            resolve();
-        } else {
-            keypress({path, which: whichs[i]});
-            i++;
-        }
-    }, keyComboGap);
+    for (let i = 0; i < whichs.length; i++) {
+        keypress({path, which: whichs[i]});
+    }
+    resolve();
 };
 
 const wait = ({duration}, resolve) => {
@@ -285,10 +282,11 @@ const saveRecording = () => {
 const record = () => {
     events = [];
     resumeRecording();
-    flattenAppEvents();
+    //flattenAppEvents();
 };
 
 const flattenAppEvents = () => {
+    console.log('called');
     let flatEvents = [];
     let allElements = $('*');
     for (let i = 0; i < allElements.length; i++) {
@@ -304,7 +302,6 @@ const flattenAppEvents = () => {
                         finalElement = $(allElements[i]).find(event.selector);
                     }
                     if (!finalElement || finalElement.length === 0) finalElement = allElements[i];
-
                     flatEvents.push({
                         path: getPath(finalElement),
                         selector: event.selector,
@@ -316,12 +313,13 @@ const flattenAppEvents = () => {
         }
     }
 
-    //$(document).find('*').off();
+    $(document).find('*').off();
     for (let event of flatEvents) {
-        let element = getElement(event.path);
-        //$('document').on(event.type, element, event.handler);
+        let attachTo = event.path;
+        if (event.selector) attachTo + ' ' + event.selector;
+        $(document).on(event.type, attachTo, event.handler);
     }
-
+    console.log('Done!')
 }
 
 const stopRecording = () => {

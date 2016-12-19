@@ -1,4 +1,5 @@
 const xpath = require('simple-xpath-position');
+const {select} = require('optimal-select');
 const visible = require('withinviewport');
 window.visble = visible;
 
@@ -7,6 +8,18 @@ const show = () => {
 };
 
 let events = [];
+
+const getElement = (selector) => {
+    console.log(selector);
+    return document.querySelector(selector, {
+        ignore: {
+            attribute (name, value, defaultPredicate) {
+              // exclude HTML5 data attributes
+              return (/data-*/).test(name) || defaultPredicate(name, value)
+            }
+          }
+    });
+};
 
 const render = (eventsArray, lastEventIndex) => {
     $('.vhs-sidebar-events').empty();
@@ -58,7 +71,7 @@ const getPrettyIdentifier = (path) => {
     let identifier = '';
     if (!path) return identifier;
 
-    let element = xpath.toNode(path, document.body);
+    let element = getElement(path);
     if (!element) {
         return identifier;
     }

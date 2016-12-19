@@ -6,6 +6,7 @@
   "dependencies": {
     "draggabilly": "2.1.1",
     "firebase": "^3.6.3",
+    "optimal-select": "3.5.0",
     "simple-xpath-position": "2.0.2",
     "withinviewport": "1.0.0"
   },
