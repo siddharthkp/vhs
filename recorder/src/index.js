@@ -152,7 +152,7 @@ const playEvent = (event) => {
 
 const click = ({path}, resolve) => {
     let element = getElement(path);
-    $(element).trigger('click');
+    element.click();
     resolve();
 };
 

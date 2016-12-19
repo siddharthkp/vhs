@@ -63,7 +63,7 @@ const getPrettyIdentifier = (path) => {
         return identifier;
     }
 
-    identifier += element.tagName ? `${element.tagName}`: '';
+    identifier += element.tagName ? `${element.tagName.toLowerCase()}`: '';
     identifier += element.id ? `#${element.id}`: '';
     identifier += element.className ? `.${element.className}`: '';
     identifier += element.text ? `(${element.text})`: '';
