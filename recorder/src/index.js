@@ -189,10 +189,25 @@ const keypress = ({selector, which}, resolve) => {
 };
 
 const keyCombo = ({selector, whichs}, resolve) => {
-    for (let i = 0; i < whichs.length; i++) {
-        keypress({selector, which: whichs[i]});
-    }
-    resolve();
+    /*
+        Playing key events with a tiny gap
+        for a smooth animation with the sidebar
+        In remote mode, we can't see the UI,
+        optimising for faster build times there.
+    */
+    let keyComboGap = 100;
+        if (vhs.remote) keyComboGap = 0;
+
+        let i = 0;
+        let interval = window.setInterval(() => {
+        if (!whichs[i]) {
+            window.clearInterval(interval);
+            resolve();
+        } else {
+            keypress({selector, which: whichs[i]});
+            i++;
+        }
+    }, keyComboGap);
 };
 
 const wait = ({duration}, resolve) => {
