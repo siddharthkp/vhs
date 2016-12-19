@@ -64,7 +64,7 @@ const recordEvent = (event) => {
     let syntheticEvent = {
         type: event.type,
         which: event.which,
-        path: xpath.fromNode(event.target, document)
+        path: getPath(event.target)
     };
     events.push(syntheticEvent);
 
@@ -101,6 +101,14 @@ const getWaitEvent = () => {
 
 const getElement = (path) => {
     return xpath.toNode(path, document);
+};
+
+const getPath = (element) => {
+    return xpath.fromNode(element, document);
+}
+
+const getSelector = (element) => {
+
 };
 
 /* Play an event */
@@ -283,7 +291,7 @@ const flattenAppEvents = () => {
                     if (!finalElement || finalElement.length === 0) finalElement = allElements[i];
 
                     flatEvents.push({
-                        path: xpath.fromNode(finalElement, document),
+                        path: getPath(finalElement),
                         selector: event.selector,
                         type: event.type,
                         handler: event.handler
@@ -296,7 +304,7 @@ const flattenAppEvents = () => {
     //$(document).find('*').off();
     for (let event of flatEvents) {
         let element = getElement(event.path);
-        //$('document').on(event.type, event.element, event.handler);
+        //$('document').on(event.type, element, event.handler);
     }
 
 }
