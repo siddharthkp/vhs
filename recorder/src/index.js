@@ -113,7 +113,6 @@ const getSelector = (element) => {
             }
         }
     });
-    console.log(selector, element);
     return selector;
 }
 
@@ -306,13 +305,14 @@ const flattenAppEvents = () => {
                 for (let j = 0; j < events.length; j++) {
                     let event = events[j];
                     let finalElement;
+                    console.log(allElements[i], event.selector, event.type);
                     if (event.selector) {
                         finalElement = $(allElements[i]).find(event.selector);
                     }
                     if (!finalElement || finalElement.length === 0) finalElement = allElements[i];
                     flatEvents.push({
                         selector: getSelector(finalElement),
-                        selector: event.selector,
+                        childSelector: event.selector,
                         type: event.type,
                         handler: event.handler
                     });
@@ -324,7 +324,7 @@ const flattenAppEvents = () => {
     $(document).find('*').off();
     for (let event of flatEvents) {
         let attachTo = event.selector;
-        if (event.selector) attachTo + ' ' + event.selector;
+        if (event.childSelector) attachTo += ' ' + event.childSelector;
         $(document).on(event.type, attachTo, event.handler);
     }
     console.log('Done!')
