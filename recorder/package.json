@@ -5,9 +5,9 @@
   "main": "src/index.js",
   "dependencies": {
     "bluebird": "3.4.6",
+    "css-selector-generator": "1.0.2",
     "draggabilly": "2.1.1",
     "firebase": "3.6.3",
-    "optimal-select": "3.5.0",
     "withinviewport": "1.0.0"
   },
   "devDependencies": {

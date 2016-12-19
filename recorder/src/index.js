@@ -1,4 +1,6 @@
-const {select} = require('optimal-select');
+const cssSelectorGenerator = require('css-selector-generator').CssSelectorGenerator;
+const selectorGenerator = new cssSelectorGenerator();
+
 
 /* Polyfill for Array.prototype.includes */
 require('core-js/fn/array/includes');
@@ -98,10 +100,12 @@ const getWaitEvent = () => {
     return event;
 };
 
-const getElement = selector => document.querySelector(selector);
+const getElement = selector => {
+    return document.querySelector(selector);
+}
 
 const getSelector = (element) => {
-    return select(element, {
+    let selector = selectorGenerator.getSelector(element, {
         ignore: {
             attribute (name, value, defaultPredicate) {
                 // exclude HTML5 data attributes
@@ -109,6 +113,8 @@ const getSelector = (element) => {
             }
         }
     });
+    console.log(selector, element);
+    return selector;
 }
 
 /* Play an event */
@@ -161,7 +167,7 @@ const playEvent = (event) => {
 
 const click = ({selector}, resolve) => {
     let element = getElement(selector);
-    $(element).trigger('click');
+    element.click();
     resolve();
 };
 
@@ -289,7 +295,6 @@ const record = () => {
 };
 
 const flattenAppEvents = () => {
-    console.log('called');
     let flatEvents = [];
     let allElements = $('*');
     for (let i = 0; i < allElements.length; i++) {

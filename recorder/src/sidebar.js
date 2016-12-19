@@ -1,4 +1,3 @@
-const {select} = require('optimal-select');
 const visible = require('withinviewport');
 
 const show = () => $('body').append(html);
