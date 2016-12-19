@@ -1,7 +1,6 @@
 const cssSelectorGenerator = require('css-selector-generator').CssSelectorGenerator;
 const selectorGenerator = new cssSelectorGenerator();
 
-
 /* Polyfill for Array.prototype.includes */
 require('core-js/fn/array/includes');
 const controls = require('./controls');
@@ -295,25 +294,40 @@ const record = () => {
 
 };
 
+/*
+    DOM events are fired in the order of specificity.
+
+    If the application's events are bound to individual elements,
+    they will fire first. This might break the recording in some cases
+    where the element is removed from the DOM after the app's event.
+
+    To fix this,
+    1. We need to standardise the specificity of all the events by
+    removing all the events from individual elements and attaching them to
+    the document.
+    2. Attach our events such that they take precedence using onFirst
+
+    This might lead to a degraded performance of the app in record mode.
+
+    flattenAppEvents implements the first step.
+*/
+
 const flattenAppEvents = () => {
     let flatEvents = [];
     let allElements = $('*');
     for (let i = 0; i < allElements.length; i++) {
-        let eventHandlers = $._data(allElements[i]).events;
+        let element = allElements[i];
+        let eventHandlers = $._data(element).events;
         if (eventHandlers) {
             let eventTypes = Object.keys(eventHandlers);
             for (let type of eventTypes) {
                 let events = eventHandlers[type];
                 for (let j = 0; j < events.length; j++) {
                     let event = events[j];
-                    let finalElement;
-                    if (event.selector) {
-                        finalElement = $(allElements[i]).find(event.selector);
-                    }
-                    if (!finalElement || finalElement.length === 0) finalElement = allElements[i];
+                    let selector = getSelector(element); // parent
+                    if (event.selector) selector += ' ' + event.selector; // child
                     flatEvents.push({
-                        selector: getSelector(finalElement),
-                        childSelector: event.selector,
+                        selector: selector,
                         type: event.type,
                         handler: event.handler
                     });
@@ -322,12 +336,10 @@ const flattenAppEvents = () => {
         }
     }
 
+    /* Unbind all events */
     $(document).find('*').off();
-    for (let event of flatEvents) {
-        let attachTo = event.selector;
-        if (event.childSelector) attachTo += ' ' + event.childSelector;
-        $(document).on(event.type, attachTo, event.handler);
-    }
+    /* Re-attach on document */
+    for (let {type, selector, handler} of flatEvents) $(document).on(type, selector, handler);
     eventsFlattened = true;
 }
 
