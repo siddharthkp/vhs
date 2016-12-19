@@ -276,29 +276,27 @@ const flattenAppEvents = () => {
                 let events = eventHandlers[type];
                 for (let j = 0; j < events.length; j++) {
                     let event = events[j];
-                    console.log(event);
                     let finalElement;
-                    if (event.selector) finalElement = $(allElements[i]).find(event.selector);
-                    else finalElement = allElements[i];
-                    console.log(finalElement);
+                    if (event.selector) {
+                        finalElement = $(allElements[i]).find(event.selector);
+                    }
+                    if (!finalElement || finalElement.length === 0) finalElement = allElements[i];
+
                     flatEvents.push({
-                        path: xpath.fromNode(finalElement),
+                        path: xpath.fromNode(finalElement, document),
                         selector: event.selector,
                         type: event.type,
                         handler: event.handler
                     });
                 }
-
             }
-
         }
     }
-    console.log(flatEvents);
 
-    $(document).find('*').off();
-    for (let events of flatEvents) {
-        let element = xpath.toNode(event.path);
-        $('document').on(event.type, event.element, event.handler);
+    //$(document).find('*').off();
+    for (let event of flatEvents) {
+        let element = getElement(event.path);
+        //$('document').on(event.type, event.element, event.handler);
     }
 
 }
