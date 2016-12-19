@@ -1,5 +1,5 @@
 {
-  "name": "vhs-player",
+  "name": "vcr-player",
   "version": "0.0.1",
   "description": "tape based ui testing",
   "main": "src/index.js",
@@ -27,19 +27,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/siddharthkp/vhs.git"
+    "url": "git+https://github.com/siddharthkp/vcr.git"
   },
   "keywords": [
-    "vhs",
+    "vcr",
     "automation",
     "testing"
   ],
   "author": "siddharthkp",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/siddharthkp/vhs/issues"
+    "url": "https://github.com/siddharthkp/vcr/issues"
   },
-  "homepage": "https://github.com/siddharthkp/vhs#readme",
+  "homepage": "https://github.com/siddharthkp/vcr#readme",
   "browserify": {
     "transform": [
       "babelify"

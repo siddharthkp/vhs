@@ -6,7 +6,7 @@ require('core-js/fn/array/includes');
 const controls = require('./controls');
 const sidebar = require('./sidebar');
 const store = require('./store');
-window.store = store;
+require('./bind-first');
 
 /* Whitelist of DOM events that are recorded */
 const eventTypes = ['click', 'keypress', 'dblclick'];
@@ -30,7 +30,8 @@ const wrapBodyInRecordable = () => {
 
 const attachHandlers = () => {
     let handlers = getEventHandlers();
-    $('.vhs-recordable').on(handlers);
+    window.handlers = handlers;
+    $('.vhs-recordable').onFirst(handlers);
 };
 
 const detachHandlers = () => {
@@ -261,7 +262,46 @@ const saveRecording = () => {
 const record = () => {
     events = [];
     resumeRecording();
+    flattenAppEvents();
 };
+
+const flattenAppEvents = () => {
+    let flatEvents = [];
+    let allElements = $('*');
+    for (let i = 0; i < allElements.length; i++) {
+        let eventHandlers = $._data(allElements[i]).events;
+        if (eventHandlers) {
+            let eventTypes = Object.keys(eventHandlers);
+            for (let type of eventTypes) {
+                let events = eventHandlers[type];
+                for (let j = 0; j < events.length; j++) {
+                    let event = events[j];
+                    console.log(event);
+                    let finalElement;
+                    if (event.selector) finalElement = $(allElements[i]).find(event.selector);
+                    else finalElement = allElements[i];
+                    console.log(finalElement);
+                    flatEvents.push({
+                        path: xpath.fromNode(finalElement),
+                        selector: event.selector,
+                        type: event.type,
+                        handler: event.handler
+                    });
+                }
+
+            }
+
+        }
+    }
+    console.log(flatEvents);
+
+    $(document).find('*').off();
+    for (let events of flatEvents) {
+        let element = xpath.toNode(event.path);
+        $('document').on(event.type, event.element, event.handler);
+    }
+
+}
 
 const stopRecording = () => {
     detachHandlers();
@@ -328,7 +368,8 @@ $(() => {
         setupPlayback,
         debug,
         resumePlayback,
-        saveRecording
+        saveRecording,
+        flattenAppEvents
     }
     wrapBodyInRecordable();
     controls.show();
