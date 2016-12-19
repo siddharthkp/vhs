@@ -282,7 +282,7 @@ const saveRecording = () => {
     if (isRecording) toggleRecording();
     /* Fetch locally persisted events */
     let events = JSON.parse(localStorage.getItem('vhs')).events;
-    let name = prompt("What do you want to name this event?");
+    let name = prompt("What do you want to name this test?");
     store.save(name, events);
 };
 
