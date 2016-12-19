@@ -287,10 +287,12 @@ const saveRecording = () => {
     store.save(name, events);
 };
 
+let eventsFlattened = false;
 const record = () => {
     events = [];
+    if (!eventsFlattened) flattenAppEvents(); /* Run only once */
     resumeRecording();
-    //flattenAppEvents();
+
 };
 
 const flattenAppEvents = () => {
@@ -305,7 +307,6 @@ const flattenAppEvents = () => {
                 for (let j = 0; j < events.length; j++) {
                     let event = events[j];
                     let finalElement;
-                    console.log(allElements[i], event.selector, event.type);
                     if (event.selector) {
                         finalElement = $(allElements[i]).find(event.selector);
                     }
@@ -327,7 +328,7 @@ const flattenAppEvents = () => {
         if (event.childSelector) attachTo += ' ' + event.childSelector;
         $(document).on(event.type, attachTo, event.handler);
     }
-    console.log('Done!')
+    eventsFlattened = true;
 }
 
 const stopRecording = () => {
