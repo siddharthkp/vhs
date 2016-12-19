@@ -2,41 +2,96 @@
   "events": [
     {
       "type": "click",
-      "path": "/html[1]/body[1]/div[1]/section[1]/header[1]/input[1]",
-      "index": 0,
-      "status": "passed",
-      "identifier": "INPUT#new-todo"
+      "which": 1,
+      "selector": "#new-todo"
     },
     {
       "type": "key-combo",
-      "path": "/html[1]/body[1]/div[1]/section[1]/header[1]/input[1]",
+      "selector": "#new-todo",
       "whichs": [
-        102,
-        105,
         114,
-        115,
-        116
-      ],
-      "index": 1,
-      "status": "passed",
-      "identifier": "INPUT#new-todo",
-      "key": "first"
-    },
-    {
-      "type": "wait",
-      "duration": 401,
-      "index": 2,
-      "status": "passed",
-      "identifier": ""
+        101,
+        99,
+        111,
+        114,
+        100
+      ]
     },
     {
       "type": "keypress",
       "which": 13,
-      "path": "/html[1]/body[1]/div[1]/section[1]/header[1]/input[1]",
-      "index": 3,
-      "status": "passed",
-      "identifier": "INPUT#new-todo",
-      "key": "↵"
+      "selector": "#new-todo"
+    },
+    {
+      "type": "wait",
+      "duration": 447
+    },
+    {
+      "type": "key-combo",
+      "selector": "#new-todo",
+      "whichs": [
+        102,
+        111,
+        114
+      ]
+    },
+    {
+      "type": "keypress",
+      "which": 13,
+      "selector": "#new-todo"
+    },
+    {
+      "type": "key-combo",
+      "selector": "#new-todo",
+      "whichs": [
+        116,
+        114,
+        97,
+        118,
+        105,
+        115
+      ]
+    },
+    {
+      "type": "keypress",
+      "which": 13,
+      "selector": "#new-todo"
+    },
+    {
+      "type": "wait",
+      "duration": 1122
+    },
+    {
+      "type": "click",
+      "which": 1,
+      "selector": ":nth-child(1) > .view > .toggle"
+    },
+    {
+      "type": "wait",
+      "duration": 570
+    },
+    {
+      "type": "click",
+      "which": 1,
+      "selector": ":nth-child(2) > .view > .toggle"
+    },
+    {
+      "type": "wait",
+      "duration": 686
+    },
+    {
+      "type": "click",
+      "which": 1,
+      "selector": ":nth-child(3) > .view > .toggle"
+    },
+    {
+      "type": "wait",
+      "duration": 1487
+    },
+    {
+      "type": "click",
+      "which": 1,
+      "selector": ":nth-child(2) > .view > .destroy"
     }
   ]
 }

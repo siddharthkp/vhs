@@ -1,12 +1,12 @@
-/* Lib to get xpath for a DOM node */
-const xpath = require('simple-xpath-position');
+const cssSelectorGenerator = require('css-selector-generator').CssSelectorGenerator;
+const selectorGenerator = new cssSelectorGenerator();
 
 /* Polyfill for Array.prototype.includes */
 require('core-js/fn/array/includes');
 const controls = require('./controls');
 const sidebar = require('./sidebar');
 const store = require('./store');
-window.store = store;
+require('./bind-first');
 
 /* Whitelist of DOM events that are recorded */
 const eventTypes = ['click', 'keypress', 'dblclick'];
@@ -30,7 +30,8 @@ const wrapBodyInRecordable = () => {
 
 const attachHandlers = () => {
     let handlers = getEventHandlers();
-    $('.vhs-recordable').on(handlers);
+    window.handlers = handlers;
+    $('.vhs-recordable').onFirst(handlers);
 };
 
 const detachHandlers = () => {
@@ -47,7 +48,7 @@ const recordEvent = (event) => {
     }
 
     /*
-     * We want to get the xpath of the DOM element.
+     * We want to get the query selector of the DOM element.
      *
      * Depending on the interface, the element might or
      * might not stay in the DOM tree after the event.
@@ -63,7 +64,7 @@ const recordEvent = (event) => {
     let syntheticEvent = {
         type: event.type,
         which: event.which,
-        path: xpath.fromNode(event.target, document.body)
+        selector: getSelector(event.target)
     };
     events.push(syntheticEvent);
 
@@ -98,9 +99,21 @@ const getWaitEvent = () => {
     return event;
 };
 
-const getElement = (path) => {
-    return xpath.toNode(path, document.body);
-};
+const getElement = selector => {
+    return document.querySelector(selector);
+}
+
+const getSelector = (element) => {
+    let selector = selectorGenerator.getSelector(element, {
+        ignore: {
+            attribute (name, value, defaultPredicate) {
+                // exclude HTML5 data attributes
+                return (/data-*/).test(name) || defaultPredicate(name, value)
+            }
+        }
+    });
+    return selector;
+}
 
 /* Play an event */
 const playEvent = (event) => {
@@ -150,20 +163,20 @@ const playEvent = (event) => {
  * resolve() must be called at the end of the function
  */
 
-const click = ({path}, resolve) => {
-    let element = getElement(path);
+const click = ({selector}, resolve) => {
+    let element = getElement(selector);
     element.click();
     resolve();
 };
 
-const dblclick = ({path}, resolve) => {
-    let element = getElement(path);
+const dblclick = ({selector}, resolve) => {
+    let element = getElement(selector);
     $(element).trigger('dblclick');
     resolve();
 };
 
-const keypress = ({path, which}, resolve) => {
-    let element = getElement(path);
+const keypress = ({selector, which}, resolve) => {
+    let element = getElement(selector);
     let currentValue = $(element).val();
     if (which === 8) {
         /* Manually handle backspace */
@@ -179,7 +192,7 @@ const keypress = ({path, which}, resolve) => {
     if (resolve) resolve();
 };
 
-const keyCombo = ({path, whichs}, resolve) => {
+const keyCombo = ({selector, whichs}, resolve) => {
     /*
         Playing key events with a tiny gap
         for a smooth animation with the sidebar
@@ -187,15 +200,15 @@ const keyCombo = ({path, whichs}, resolve) => {
         optimising for faster build times there.
     */
     let keyComboGap = 100;
-    if (vhs.remote) keyComboGap = 0;
+        if (vhs.remote) keyComboGap = 0;
 
-    let i = 0;
-    let interval = window.setInterval(() => {
+        let i = 0;
+        let interval = window.setInterval(() => {
         if (!whichs[i]) {
             window.clearInterval(interval);
             resolve();
         } else {
-            keypress({path, which: whichs[i]});
+            keypress({selector, which: whichs[i]});
             i++;
         }
     }, keyComboGap);
@@ -273,10 +286,62 @@ const saveRecording = () => {
     store.save(name, events);
 };
 
+let eventsFlattened = false;
 const record = () => {
     events = [];
+    if (!eventsFlattened) flattenAppEvents(); /* Run only once */
     resumeRecording();
+
 };
+
+/*
+    DOM events are fired in the order of specificity.
+
+    If the application's events are bound to individual elements,
+    they will fire first. This might break the recording in some cases
+    where the element is removed from the DOM after the app's event.
+
+    To fix this,
+    1. We need to standardise the specificity of all the events by
+    removing all the events from individual elements and attaching them to
+    the document.
+    2. Attach our events such that they take precedence using onFirst
+
+    This might lead to a degraded performance of the app in record mode.
+
+    flattenAppEvents implements the first step.
+*/
+
+const flattenAppEvents = () => {
+    let flatEvents = [];
+    let allElements = $('*');
+    for (let i = 0; i < allElements.length; i++) {
+        let element = allElements[i];
+        let eventHandlers = $._data(element).events;
+        if (eventHandlers) {
+            let eventTypes = Object.keys(eventHandlers);
+            for (let type of eventTypes) {
+                let events = eventHandlers[type];
+                for (let j = 0; j < events.length; j++) {
+                    let event = events[j];
+                    let selector = getSelector(element); // parent
+                    if (event.selector) selector += ' ' + event.selector; // child
+                    flatEvents.push({
+                        selector: selector,
+                        type: event.type,
+                        handler: event.handler
+                    });
+                }
+            }
+        }
+    }
+
+    /* Unbind all events */
+    $(document).find('*').off();
+    /* Re-attach on document */
+    for (let {type, selector, handler} of flatEvents) $(document).on(type, selector, handler);
+    eventsFlattened = true;
+}
 
 const stopRecording = () => {
     detachHandlers();
@@ -343,7 +408,8 @@ $(() => {
         setupPlayback,
         debug,
         resumePlayback,
-        saveRecording
+        saveRecording,
+        flattenAppEvents
     }
     wrapBodyInRecordable();
     controls.show();
