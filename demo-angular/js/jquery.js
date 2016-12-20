@@ -1,0 +1,1 @@
+../../recorder/crx/jquery.js
