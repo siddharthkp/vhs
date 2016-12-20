@@ -6,8 +6,8 @@
  */
 
 let simulate = {};
-if (window.jQuery) simulate = require('./simulate-jquery');
-
+if (window.angular) simulate = require('./simulate-angular');
+else if (window.jQuery) simulate = require('./simulate-jquery');
 
 module.exports = {
     click: simulate.click,
