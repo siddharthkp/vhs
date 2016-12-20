@@ -21,7 +21,7 @@ const togglePausedState = () => {
 
 const styles = `<style>
     .vhs-controls {
-        position: absolute;
+        position: fixed;
         top: 10px;
         left: 10px;
         z-index: 99999;
