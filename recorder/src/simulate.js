@@ -6,7 +6,8 @@
  */
 
 let simulate = {};
-if (window.jQuery) simulate = require('./jquery-simulate');
+if (window.jQuery) simulate = require('./simulate-jquery');
+
 
 module.exports = {
     click: simulate.click,
