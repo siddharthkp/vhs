@@ -2,6 +2,11 @@
 (function (window) {
 	'use strict';
 
+    /*
+        Don't want to persist the changes
+    */
+    var fakeLocalStorage = {};
+
 	/**
 	 * Creates a new client side storage object and will create an empty
 	 * collection if no collection already exists.
@@ -15,15 +20,15 @@
 
 		this._dbName = name;
 
-		if (!localStorage[name]) {
+		if (!fakeLocalStorage[name]) {
 			var data = {
 				todos: []
 			};
 
-			localStorage[name] = JSON.stringify(data);
+			fakeLocalStorage[name] = JSON.stringify(data);
 		}
 
-		callback.call(this, JSON.parse(localStorage[name]));
+		callback.call(this, JSON.parse(fakeLocalStorage[name]));
 	}
 
 	/**
@@ -44,7 +49,7 @@
 			return;
 		}
 
-		var todos = JSON.parse(localStorage[this._dbName]).todos;
+		var todos = JSON.parse(fakeLocalStorage[this._dbName]).todos;
 
 		callback.call(this, todos.filter(function (todo) {
 			for (var q in query) {
@@ -63,7 +68,7 @@
 	 */
 	Store.prototype.findAll = function (callback) {
 		callback = callback || function () {};
-		callback.call(this, JSON.parse(localStorage[this._dbName]).todos);
+		callback.call(this, JSON.parse(fakeLocalStorage[this._dbName]).todos);
 	};
 
 	/**
@@ -75,7 +80,7 @@
 	 * @param {number} id An optional param to enter an ID of an item to update
 	 */
 	Store.prototype.save = function (updateData, callback, id) {
-		var data = JSON.parse(localStorage[this._dbName]);
+		var data = JSON.parse(fakeLocalStorage[this._dbName]);
 		var todos = data.todos;
 
 		callback = callback || function () {};
@@ -91,14 +96,14 @@
 				}
 			}
 
-			localStorage[this._dbName] = JSON.stringify(data);
+			fakeLocalStorage[this._dbName] = JSON.stringify(data);
 			callback.call(this, todos);
 		} else {
 			// Generate an ID
 			updateData.id = new Date().getTime();
 
 			todos.push(updateData);
-			localStorage[this._dbName] = JSON.stringify(data);
+			fakeLocalStorage[this._dbName] = JSON.stringify(data);
 			callback.call(this, [updateData]);
 		}
 	};
@@ -110,7 +115,7 @@
 	 * @param {function} callback The callback to fire after saving
 	 */
 	Store.prototype.remove = function (id, callback) {
-		var data = JSON.parse(localStorage[this._dbName]);
+		var data = JSON.parse(fakeLocalStorage[this._dbName]);
 		var todos = data.todos;
 
 		for (var i = 0; i < todos.length; i++) {
@@ -120,7 +125,7 @@
 			}
 		}
 
-		localStorage[this._dbName] = JSON.stringify(data);
+		fakeLocalStorage[this._dbName] = JSON.stringify(data);
 		callback.call(this, todos);
 	};
 
@@ -131,7 +136,7 @@
 	 */
 	Store.prototype.drop = function (callback) {
 		var data = {todos: []};
-		localStorage[this._dbName] = JSON.stringify(data);
+		fakeLocalStorage[this._dbName] = JSON.stringify(data);
 		callback.call(this, data.todos);
 	};
 
