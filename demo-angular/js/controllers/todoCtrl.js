@@ -115,6 +115,10 @@ angular.module('todomvc')
 			store.clearCompleted();
 		};
 
+        $scope.keydown = function ($event) {
+            console.log($event.which);
+        }
+
 		$scope.markAll = function (completed) {
 			todos.forEach(function (todo) {
 				if (todo.completed !== completed) {
