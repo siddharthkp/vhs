@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "babel index.js -o lib.js",
-    "local": "local=true framework=jquery node lib.js",
+    "local": "local=true node lib.js",
     "remote": "url=http://localhost:3000 node lib.js",
     "test": "npm run build && npm run local"
   },
