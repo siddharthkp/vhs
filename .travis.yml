@@ -3,7 +3,10 @@ node_js:
   - "6"
 env:
   - APP=recorder
-  - APP=remote
+  - APP=remote framework=vanilla
+  - APP=remote framework=jquery
+  - APP=remote framework=angular
+  - APP=remote framework=react
 script:
   - cd $APP && npm install && npm test
 notifications:
