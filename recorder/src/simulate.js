@@ -9,7 +9,8 @@
 
  const getElement = selector => {
      let element = document.querySelector(selector);
-     return $(element);
+     if (window.angular) return angular.element(element);
+     else return $(element);
  }
 
  const click = ({selector}, resolve) => {
