@@ -7,7 +7,7 @@ let server;
 
 if (process.env.local) {
     server = require('./test-server.js');
-    url = 'http://localhost:3000';
+    url = 'http://localhost:3001';
 } else url = process.env.url;
 
 /* Pre recorded vhs.events */

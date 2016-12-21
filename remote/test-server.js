@@ -1,6 +1,6 @@
 const http = require('http');
 const nodeStatic = require('node-static');
-const port = 3000;
+const port = 3001;
 
 const demo = new nodeStatic.Server('../demos/jquery');
 const server = http.createServer((request, response) => {
