@@ -38,9 +38,7 @@ const prettyOut = (message) => {
     if (events.pop().status !== 'pending') {
         clear();
         console.log(render.join('\n'));
-        phantomInstance.process.kill();
-        phantomInstance.exit();
-        if (process.env.local) server.close();
+        terminateTests();
     }
 };
 
@@ -78,3 +76,12 @@ phantom.create([], {
 .then(res => {
     console.log(yellow('Running tests'));
 });
+
+let terminateTests = () => {
+    phantomInstance.process.kill();
+    phantomInstance.exit();
+    if (process.env.local) server.close();
+}
+
+process.on('exit', terminateTests);
+process.on('SIGINT', terminateTests);
