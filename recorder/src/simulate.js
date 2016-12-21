@@ -5,9 +5,7 @@
  * resolve() must be called at the end of the function
  */
 
-let simulate = {};
-if (window.angular) simulate = require('./simulate-angular');
-else if (window.jQuery) simulate = require('./simulate-jquery');
+const simulate = require('./jquery-simulate-wrapper');
 
 module.exports = {
     click: simulate.click,

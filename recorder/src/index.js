@@ -3,11 +3,13 @@ const selectorGenerator = new cssSelectorGenerator();
 
 /* Polyfill for Array.prototype.includes */
 require('core-js/fn/array/includes');
+/* jQuery helper lib */
+require('./bind-first');
+/* vhs modules */
 const controls = require('./controls');
 const sidebar = require('./sidebar');
 const store = require('./store');
 const {click, dblclick, keypress, keyCombo, wait} = require('./simulate');
-require('./bind-first');
 
 /* Whitelist of DOM events that are recorded */
 const eventTypes = ['click', 'keypress', 'dblclick'];

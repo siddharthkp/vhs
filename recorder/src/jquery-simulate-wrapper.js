@@ -1,16 +1,18 @@
+require('./jquery-simulate-vendor');
+
 const getElement = selector => {
     return document.querySelector(selector);
 }
 
 const click = ({selector}, resolve) => {
     let element = getElement(selector);
-    element.click();
+    $(element).simulate('click');
     resolve();
 };
 
 const dblclick = ({selector}, resolve) => {
     let element = getElement(selector);
-    $(element).trigger('dblclick');
+    $(element).simulate('dblclick');
     resolve();
 };
 
@@ -26,8 +28,8 @@ const keypress = ({selector, which}, resolve) => {
         $(element).val(currentValue + key);
     }
     /* Trigger event */
-    $(element).trigger(jQuery.Event('keydown', {which}));
-    $(element).trigger(jQuery.Event('keyup', {which}));
+    $(element).simulate('keydown', {keyCode: which});
+    $(element).simulate('keyup', {keyCode: which});
     if (resolve) resolve();
 };
 
