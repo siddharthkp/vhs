@@ -30,6 +30,12 @@ const keypress = ({selector, which}, resolve) => {
     /* Trigger event */
     $(element).simulate('keydown', {keyCode: which});
     $(element).simulate('keyup', {keyCode: which});
+
+    if (which === 13) {
+        let form = $(element).closest('form');
+        if (form.length) $(form).submit();
+    }
+
     if (resolve) resolve();
 };
 
