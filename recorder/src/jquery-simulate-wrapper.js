@@ -1,38 +1,39 @@
 require('./jquery-simulate-vendor');
 
 const getElement = selector => {
-    return document.querySelector(selector);
+    let element = document.querySelector(selector);
+    return $(element);
 }
 
 const click = ({selector}, resolve) => {
     let element = getElement(selector);
-    $(element).simulate('click');
+    element.simulate('click');
     resolve();
 };
 
 const dblclick = ({selector}, resolve) => {
     let element = getElement(selector);
-    $(element).simulate('dblclick');
+    element.simulate('dblclick');
     resolve();
 };
 
 const keypress = ({selector, which}, resolve) => {
     let element = getElement(selector);
-    let currentValue = $(element).val();
+    let currentValue = element.val();
     if (which === 8) {
         /* Manually handle backspace */
-        $(element).val(currentValue.substring(0, currentValue.length-1));
+        element.val(currentValue.substring(0, currentValue.length-1));
     } else {
         let key = String.fromCharCode(which);
         /* Manually add charachter */
-        $(element).val(currentValue + key);
+        element.val(currentValue + key);
     }
     /* Trigger event */
-    $(element).simulate('keydown', {keyCode: which});
-    $(element).simulate('keyup', {keyCode: which});
+    element.simulate('keydown', {keyCode: which});
+    element.simulate('keyup', {keyCode: which});
 
     if (which === 13) {
-        let form = $(element).closest('form');
+        let form = element.closest('form');
         if (form.length) $(form).submit();
     }
 
