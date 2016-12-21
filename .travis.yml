@@ -5,6 +5,7 @@ env:
   - APP=recorder
   - APP=remote framework=vanilla
   - APP=remote framework=jquery
+  - APP=remote framework=jquery-form
   - APP=remote framework=angular
   - APP=remote framework=react
 script:
