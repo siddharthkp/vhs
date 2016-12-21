@@ -2,9 +2,11 @@ const http = require('http');
 const nodeStatic = require('node-static');
 const port = 3001;
 
-const demo = new nodeStatic.Server('../demos/jquery');
+let framework = process.env.framework;
+
+const demo = new nodeStatic.Server(`../demos/${framework}`);
 const server = http.createServer((request, response) => {
     request.addListener('end', () => demo.serve(request, response)).resume();
-}).listen(port, () => console.log(`Running server on port ${port}`));
+}).listen(port, () => console.log(`Running ${framework} demo on port ${port}`));
 
 module.exports = server;
