@@ -43,6 +43,7 @@ var prettyOut = function prettyOut(message) {
     if (events.pop().status !== 'pending') {
         clear();
         console.log(render.join('\n'));
+        phantomInstance.process.kill();
         phantomInstance.exit();
         if (process.env.local) server.close();
     }
