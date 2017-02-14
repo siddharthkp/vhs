@@ -39,6 +39,7 @@
      /* Trigger event */
      element.simulate('keydown', {keyCode: which});
      element.simulate('keyup', {keyCode: which});
+     element.simulate('change');
 
      if (which === 13) {
          let form = element.closest('form');
